@@ -6,7 +6,7 @@
 // 	protoc               v3.21.7
 // source: CaptchaPlugin.proto
 
-package captcha
+package pcaptcha
 
 import (
 	context "context"

@@ -4,7 +4,7 @@
 // 	protoc               v3.21.7
 // source: VCodePlugin.proto
 
-package iplugins
+package pvcode
 
 import (
 	context "context"
@@ -52,7 +52,7 @@ type SendVerificationCodeRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	SendType SendType `protobuf:"varint,1,opt,name=sendType,proto3,enum=captcha.SendType" json:"sendType,omitempty"`
+	SendType SendType `protobuf:"varint,1,opt,name=sendType,proto3,enum=pvcode.SendType" json:"sendType,omitempty"`
 	Target   string   `protobuf:"bytes,2,opt,name=target,proto3" json:"target,omitempty"`
 	Code     string   `protobuf:"bytes,3,opt,name=code,proto3" json:"code,omitempty"`
 }

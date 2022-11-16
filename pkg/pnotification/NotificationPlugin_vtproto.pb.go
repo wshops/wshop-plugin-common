@@ -4,7 +4,7 @@
 // 	protoc               v3.21.7
 // source: NotificationPlugin.proto
 
-package vcode
+package pvcode
 
 import (
 	fmt "fmt"

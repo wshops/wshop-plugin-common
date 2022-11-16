@@ -4,7 +4,7 @@
 // 	protoc               v3.21.7
 // source: VCodePlugin.proto
 
-package iplugins
+package pvcode
 
 import (
 	fmt "fmt"
