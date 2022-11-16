@@ -284,6 +284,6 @@ func (x *PConstants) GetValue() string {
 }
 
 // go:plugin type=plugin version=1
-type VCodePlugin interface {
+type VCode interface {
 	SendVerificationCode(context.Context, SendVerificationCodeRequest) (SendVerificationCodeResponse, error)
 }

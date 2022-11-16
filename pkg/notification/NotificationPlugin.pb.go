@@ -256,7 +256,7 @@ func (x *PConstants) GetValue() string {
 }
 
 // go:plugin type=plugin version=1
-type NotificationPlugin interface {
+type Notification interface {
 	ConfigPluginInfo(context.Context, ConfigPluginInfoRequest) (PluginInfo, error)
 	SendNotification(context.Context, SendNotificationRequest) (SendNotificationResponse, error)
 }

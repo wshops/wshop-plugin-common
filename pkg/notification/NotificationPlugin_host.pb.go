@@ -21,20 +21,20 @@ import (
 	os "os"
 )
 
-const NotificationPluginPluginAPIVersion = 1
+const NotificationPluginAPIVersion = 1
 
-type NotificationPluginPluginOption struct {
+type NotificationPluginOption struct {
 	Stdout io.Writer
 	Stderr io.Writer
 	FS     fs.FS
 }
 
-type NotificationPluginPlugin struct {
+type NotificationPlugin struct {
 	runtime wazero.Runtime
 	config  wazero.ModuleConfig
 }
 
-func NewNotificationPluginPlugin(ctx context.Context, opt NotificationPluginPluginOption) (*NotificationPluginPlugin, error) {
+func NewNotificationPlugin(ctx context.Context, opt NotificationPluginOption) (*NotificationPlugin, error) {
 
 	// Create a new WebAssembly Runtime.
 	r := wazero.NewRuntime(ctx)
@@ -44,12 +44,12 @@ func NewNotificationPluginPlugin(ctx context.Context, opt NotificationPluginPlug
 		// By default, I/O streams are discarded and there's no file system.
 		WithStdout(opt.Stdout).WithStderr(opt.Stderr).WithFS(opt.FS)
 
-	return &NotificationPluginPlugin{
+	return &NotificationPlugin{
 		runtime: r,
 		config:  config,
 	}, nil
 }
-func (p *NotificationPluginPlugin) Load(ctx context.Context, pluginPath string) (NotificationPlugin, error) {
+func (p *NotificationPlugin) Load(ctx context.Context, pluginPath string) (Notification, error) {
 	b, err := os.ReadFile(pluginPath)
 	if err != nil {
 		return nil, err
@@ -81,27 +81,27 @@ func (p *NotificationPluginPlugin) Load(ctx context.Context, pluginPath string) 
 	}
 
 	// Compare API versions with the loading plugin
-	apiVersion := module.ExportedFunction("notification_plugin_api_version")
+	apiVersion := module.ExportedFunction("notification_api_version")
 	if apiVersion == nil {
-		return nil, errors.New("notification_plugin_api_version is not exported")
+		return nil, errors.New("notification_api_version is not exported")
 	}
 	results, err := apiVersion.Call(ctx)
 	if err != nil {
 		return nil, err
 	} else if len(results) != 1 {
-		return nil, errors.New("invalid notification_plugin_api_version signature")
+		return nil, errors.New("invalid notification_api_version signature")
 	}
-	if results[0] != NotificationPluginPluginAPIVersion {
-		return nil, fmt.Errorf("API version mismatch, host: %d, plugin: %d", NotificationPluginPluginAPIVersion, results[0])
+	if results[0] != NotificationPluginAPIVersion {
+		return nil, fmt.Errorf("API version mismatch, host: %d, plugin: %d", NotificationPluginAPIVersion, results[0])
 	}
 
-	configplugininfo := module.ExportedFunction("notification_plugin_config_plugin_info")
+	configplugininfo := module.ExportedFunction("notification_config_plugin_info")
 	if configplugininfo == nil {
-		return nil, errors.New("notification_plugin_config_plugin_info is not exported")
+		return nil, errors.New("notification_config_plugin_info is not exported")
 	}
-	sendnotification := module.ExportedFunction("notification_plugin_send_notification")
+	sendnotification := module.ExportedFunction("notification_send_notification")
 	if sendnotification == nil {
-		return nil, errors.New("notification_plugin_send_notification is not exported")
+		return nil, errors.New("notification_send_notification is not exported")
 	}
 
 	malloc := module.ExportedFunction("malloc")
@@ -113,7 +113,7 @@ func (p *NotificationPluginPlugin) Load(ctx context.Context, pluginPath string) 
 	if free == nil {
 		return nil, errors.New("free is not exported")
 	}
-	return &notificationPluginPlugin{module: module,
+	return &notificationPlugin{module: module,
 		malloc:           malloc,
 		free:             free,
 		configplugininfo: configplugininfo,
@@ -121,7 +121,7 @@ func (p *NotificationPluginPlugin) Load(ctx context.Context, pluginPath string) 
 	}, nil
 }
 
-type notificationPluginPlugin struct {
+type notificationPlugin struct {
 	module           api.Module
 	malloc           api.Function
 	free             api.Function
@@ -129,7 +129,7 @@ type notificationPluginPlugin struct {
 	sendnotification api.Function
 }
 
-func (p *notificationPluginPlugin) ConfigPluginInfo(ctx context.Context, request ConfigPluginInfoRequest) (response PluginInfo, err error) {
+func (p *notificationPlugin) ConfigPluginInfo(ctx context.Context, request ConfigPluginInfoRequest) (response PluginInfo, err error) {
 	data, err := request.MarshalVT()
 	if err != nil {
 		return response, err
@@ -171,7 +171,7 @@ func (p *notificationPluginPlugin) ConfigPluginInfo(ctx context.Context, request
 
 	return response, nil
 }
-func (p *notificationPluginPlugin) SendNotification(ctx context.Context, request SendNotificationRequest) (response SendNotificationResponse, err error) {
+func (p *notificationPlugin) SendNotification(ctx context.Context, request SendNotificationRequest) (response SendNotificationResponse, err error) {
 	data, err := request.MarshalVT()
 	if err != nil {
 		return response, err

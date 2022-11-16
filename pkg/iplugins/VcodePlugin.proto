@@ -4,7 +4,7 @@ package captcha;
 option go_package = "git.jetbrains.space/wshops/wshops/wshop-plugin-common/pkg/iplugins";
 
 // go:plugin type=plugin version=1
-service VCodePlugin {
+service VCode {
   rpc SendVerificationCode(SendVerificationCodeRequest) returns (SendVerificationCodeResponse);
 }
 

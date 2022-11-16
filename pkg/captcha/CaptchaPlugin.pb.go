@@ -319,7 +319,7 @@ func (x *PConstants) GetValue() string {
 }
 
 // go:plugin type=plugin version=1
-type CaptchaPlugin interface {
+type Captcha interface {
 	ConfigPluginInfo(context.Context, ConfigPluginInfoRequest) (PluginInfo, error)
 	// VerifyCaptcha 验证验证码
 	VerifyCaptcha(context.Context, VerifyCaptchaRequest) (VerifyCaptchaResponse, error)

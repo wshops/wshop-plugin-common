@@ -13,27 +13,27 @@ import (
 	wasm "github.com/knqyf263/go-plugin/wasm"
 )
 
-const CaptchaPluginPluginAPIVersion = 1
+const CaptchaPluginAPIVersion = 1
 
-//export captcha_plugin_api_version
-func _captcha_plugin_api_version() uint64 {
-	return CaptchaPluginPluginAPIVersion
+//export captcha_api_version
+func _captcha_api_version() uint64 {
+	return CaptchaPluginAPIVersion
 }
 
-var captchaPlugin CaptchaPlugin
+var captcha Captcha
 
-func RegisterCaptchaPlugin(p CaptchaPlugin) {
-	captchaPlugin = p
+func RegisterCaptcha(p Captcha) {
+	captcha = p
 }
 
-//export captcha_plugin_config_plugin_info
-func _captcha_plugin_config_plugin_info(ptr, size uint32) uint64 {
+//export captcha_config_plugin_info
+func _captcha_config_plugin_info(ptr, size uint32) uint64 {
 	b := wasm.PtrToByte(ptr, size)
 	var req ConfigPluginInfoRequest
 	if err := req.UnmarshalVT(b); err != nil {
 		return 0
 	}
-	response, err := captchaPlugin.ConfigPluginInfo(context.Background(), req)
+	response, err := captcha.ConfigPluginInfo(context.Background(), req)
 	if err != nil {
 		return 0
 	}
@@ -46,14 +46,14 @@ func _captcha_plugin_config_plugin_info(ptr, size uint32) uint64 {
 	return (uint64(ptr) << uint64(32)) | uint64(size)
 }
 
-//export captcha_plugin_verify_captcha
-func _captcha_plugin_verify_captcha(ptr, size uint32) uint64 {
+//export captcha_verify_captcha
+func _captcha_verify_captcha(ptr, size uint32) uint64 {
 	b := wasm.PtrToByte(ptr, size)
 	var req VerifyCaptchaRequest
 	if err := req.UnmarshalVT(b); err != nil {
 		return 0
 	}
-	response, err := captchaPlugin.VerifyCaptcha(context.Background(), req)
+	response, err := captcha.VerifyCaptcha(context.Background(), req)
 	if err != nil {
 		return 0
 	}
@@ -66,14 +66,14 @@ func _captcha_plugin_verify_captcha(ptr, size uint32) uint64 {
 	return (uint64(ptr) << uint64(32)) | uint64(size)
 }
 
-//export captcha_plugin_get_custom_html_input_field
-func _captcha_plugin_get_custom_html_input_field(ptr, size uint32) uint64 {
+//export captcha_get_custom_html_input_field
+func _captcha_get_custom_html_input_field(ptr, size uint32) uint64 {
 	b := wasm.PtrToByte(ptr, size)
 	var req GetCustomHtmlInputFieldRequest
 	if err := req.UnmarshalVT(b); err != nil {
 		return 0
 	}
-	response, err := captchaPlugin.GetCustomHtmlInputField(context.Background(), req)
+	response, err := captcha.GetCustomHtmlInputField(context.Background(), req)
 	if err != nil {
 		return 0
 	}
@@ -86,14 +86,14 @@ func _captcha_plugin_get_custom_html_input_field(ptr, size uint32) uint64 {
 	return (uint64(ptr) << uint64(32)) | uint64(size)
 }
 
-//export captcha_plugin_get_custom_html_head
-func _captcha_plugin_get_custom_html_head(ptr, size uint32) uint64 {
+//export captcha_get_custom_html_head
+func _captcha_get_custom_html_head(ptr, size uint32) uint64 {
 	b := wasm.PtrToByte(ptr, size)
 	var req GetCustomHtmlHeadRequest
 	if err := req.UnmarshalVT(b); err != nil {
 		return 0
 	}
-	response, err := captchaPlugin.GetCustomHtmlHead(context.Background(), req)
+	response, err := captcha.GetCustomHtmlHead(context.Background(), req)
 	if err != nil {
 		return 0
 	}
@@ -106,14 +106,14 @@ func _captcha_plugin_get_custom_html_head(ptr, size uint32) uint64 {
 	return (uint64(ptr) << uint64(32)) | uint64(size)
 }
 
-//export captcha_plugin_get_custom_html_body_end
-func _captcha_plugin_get_custom_html_body_end(ptr, size uint32) uint64 {
+//export captcha_get_custom_html_body_end
+func _captcha_get_custom_html_body_end(ptr, size uint32) uint64 {
 	b := wasm.PtrToByte(ptr, size)
 	var req GetCustomHtmlBodyEndRequest
 	if err := req.UnmarshalVT(b); err != nil {
 		return 0
 	}
-	response, err := captchaPlugin.GetCustomHtmlBodyEnd(context.Background(), req)
+	response, err := captcha.GetCustomHtmlBodyEnd(context.Background(), req)
 	if err != nil {
 		return 0
 	}

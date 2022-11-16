@@ -13,27 +13,27 @@ import (
 	wasm "github.com/knqyf263/go-plugin/wasm"
 )
 
-const NotificationPluginPluginAPIVersion = 1
+const NotificationPluginAPIVersion = 1
 
-//export notification_plugin_api_version
-func _notification_plugin_api_version() uint64 {
-	return NotificationPluginPluginAPIVersion
+//export notification_api_version
+func _notification_api_version() uint64 {
+	return NotificationPluginAPIVersion
 }
 
-var notificationPlugin NotificationPlugin
+var notification Notification
 
-func RegisterNotificationPlugin(p NotificationPlugin) {
-	notificationPlugin = p
+func RegisterNotification(p Notification) {
+	notification = p
 }
 
-//export notification_plugin_config_plugin_info
-func _notification_plugin_config_plugin_info(ptr, size uint32) uint64 {
+//export notification_config_plugin_info
+func _notification_config_plugin_info(ptr, size uint32) uint64 {
 	b := wasm.PtrToByte(ptr, size)
 	var req ConfigPluginInfoRequest
 	if err := req.UnmarshalVT(b); err != nil {
 		return 0
 	}
-	response, err := notificationPlugin.ConfigPluginInfo(context.Background(), req)
+	response, err := notification.ConfigPluginInfo(context.Background(), req)
 	if err != nil {
 		return 0
 	}
@@ -46,14 +46,14 @@ func _notification_plugin_config_plugin_info(ptr, size uint32) uint64 {
 	return (uint64(ptr) << uint64(32)) | uint64(size)
 }
 
-//export notification_plugin_send_notification
-func _notification_plugin_send_notification(ptr, size uint32) uint64 {
+//export notification_send_notification
+func _notification_send_notification(ptr, size uint32) uint64 {
 	b := wasm.PtrToByte(ptr, size)
 	var req SendNotificationRequest
 	if err := req.UnmarshalVT(b); err != nil {
 		return 0
 	}
-	response, err := notificationPlugin.SendNotification(context.Background(), req)
+	response, err := notification.SendNotification(context.Background(), req)
 	if err != nil {
 		return 0
 	}

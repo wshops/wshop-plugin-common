@@ -13,27 +13,27 @@ import (
 	wasm "github.com/knqyf263/go-plugin/wasm"
 )
 
-const VCodePluginPluginAPIVersion = 1
+const VCodePluginAPIVersion = 1
 
-//export v_code_plugin_api_version
-func _v_code_plugin_api_version() uint64 {
-	return VCodePluginPluginAPIVersion
+//export v_code_api_version
+func _v_code_api_version() uint64 {
+	return VCodePluginAPIVersion
 }
 
-var vCodePlugin VCodePlugin
+var vCode VCode
 
-func RegisterVCodePlugin(p VCodePlugin) {
-	vCodePlugin = p
+func RegisterVCode(p VCode) {
+	vCode = p
 }
 
-//export v_code_plugin_send_verification_code
-func _v_code_plugin_send_verification_code(ptr, size uint32) uint64 {
+//export v_code_send_verification_code
+func _v_code_send_verification_code(ptr, size uint32) uint64 {
 	b := wasm.PtrToByte(ptr, size)
 	var req SendVerificationCodeRequest
 	if err := req.UnmarshalVT(b); err != nil {
 		return 0
 	}
-	response, err := vCodePlugin.SendVerificationCode(context.Background(), req)
+	response, err := vCode.SendVerificationCode(context.Background(), req)
 	if err != nil {
 		return 0
 	}

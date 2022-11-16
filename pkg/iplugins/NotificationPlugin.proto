@@ -4,7 +4,7 @@ package vcode;
 option go_package = "git.jetbrains.space/wshops/wshops/wshop-plugin-common/pkg/vcode";
 
 // go:plugin type=plugin version=1
-service NotificationPlugin {
+service Notification {
   rpc ConfigPluginInfo(ConfigPluginInfoRequest) returns (PluginInfo);
   rpc SendNotification(SendNotificationRequest) returns (SendNotificationResponse);
 }

@@ -21,20 +21,20 @@ import (
 	os "os"
 )
 
-const VCodePluginPluginAPIVersion = 1
+const VCodePluginAPIVersion = 1
 
-type VCodePluginPluginOption struct {
+type VCodePluginOption struct {
 	Stdout io.Writer
 	Stderr io.Writer
 	FS     fs.FS
 }
 
-type VCodePluginPlugin struct {
+type VCodePlugin struct {
 	runtime wazero.Runtime
 	config  wazero.ModuleConfig
 }
 
-func NewVCodePluginPlugin(ctx context.Context, opt VCodePluginPluginOption) (*VCodePluginPlugin, error) {
+func NewVCodePlugin(ctx context.Context, opt VCodePluginOption) (*VCodePlugin, error) {
 
 	// Create a new WebAssembly Runtime.
 	r := wazero.NewRuntime(ctx)
@@ -44,12 +44,12 @@ func NewVCodePluginPlugin(ctx context.Context, opt VCodePluginPluginOption) (*VC
 		// By default, I/O streams are discarded and there's no file system.
 		WithStdout(opt.Stdout).WithStderr(opt.Stderr).WithFS(opt.FS)
 
-	return &VCodePluginPlugin{
+	return &VCodePlugin{
 		runtime: r,
 		config:  config,
 	}, nil
 }
-func (p *VCodePluginPlugin) Load(ctx context.Context, pluginPath string) (VCodePlugin, error) {
+func (p *VCodePlugin) Load(ctx context.Context, pluginPath string) (VCode, error) {
 	b, err := os.ReadFile(pluginPath)
 	if err != nil {
 		return nil, err
@@ -81,23 +81,23 @@ func (p *VCodePluginPlugin) Load(ctx context.Context, pluginPath string) (VCodeP
 	}
 
 	// Compare API versions with the loading plugin
-	apiVersion := module.ExportedFunction("v_code_plugin_api_version")
+	apiVersion := module.ExportedFunction("v_code_api_version")
 	if apiVersion == nil {
-		return nil, errors.New("v_code_plugin_api_version is not exported")
+		return nil, errors.New("v_code_api_version is not exported")
 	}
 	results, err := apiVersion.Call(ctx)
 	if err != nil {
 		return nil, err
 	} else if len(results) != 1 {
-		return nil, errors.New("invalid v_code_plugin_api_version signature")
+		return nil, errors.New("invalid v_code_api_version signature")
 	}
-	if results[0] != VCodePluginPluginAPIVersion {
-		return nil, fmt.Errorf("API version mismatch, host: %d, plugin: %d", VCodePluginPluginAPIVersion, results[0])
+	if results[0] != VCodePluginAPIVersion {
+		return nil, fmt.Errorf("API version mismatch, host: %d, plugin: %d", VCodePluginAPIVersion, results[0])
 	}
 
-	sendverificationcode := module.ExportedFunction("v_code_plugin_send_verification_code")
+	sendverificationcode := module.ExportedFunction("v_code_send_verification_code")
 	if sendverificationcode == nil {
-		return nil, errors.New("v_code_plugin_send_verification_code is not exported")
+		return nil, errors.New("v_code_send_verification_code is not exported")
 	}
 
 	malloc := module.ExportedFunction("malloc")
@@ -109,21 +109,21 @@ func (p *VCodePluginPlugin) Load(ctx context.Context, pluginPath string) (VCodeP
 	if free == nil {
 		return nil, errors.New("free is not exported")
 	}
-	return &vCodePluginPlugin{module: module,
+	return &vCodePlugin{module: module,
 		malloc:               malloc,
 		free:                 free,
 		sendverificationcode: sendverificationcode,
 	}, nil
 }
 
-type vCodePluginPlugin struct {
+type vCodePlugin struct {
 	module               api.Module
 	malloc               api.Function
 	free                 api.Function
 	sendverificationcode api.Function
 }
 
-func (p *vCodePluginPlugin) SendVerificationCode(ctx context.Context, request SendVerificationCodeRequest) (response SendVerificationCodeResponse, err error) {
+func (p *vCodePlugin) SendVerificationCode(ctx context.Context, request SendVerificationCodeRequest) (response SendVerificationCodeResponse, err error) {
 	data, err := request.MarshalVT()
 	if err != nil {
 		return response, err

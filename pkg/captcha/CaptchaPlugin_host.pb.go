@@ -21,20 +21,20 @@ import (
 	os "os"
 )
 
-const CaptchaPluginPluginAPIVersion = 1
+const CaptchaPluginAPIVersion = 1
 
-type CaptchaPluginPluginOption struct {
+type CaptchaPluginOption struct {
 	Stdout io.Writer
 	Stderr io.Writer
 	FS     fs.FS
 }
 
-type CaptchaPluginPlugin struct {
+type CaptchaPlugin struct {
 	runtime wazero.Runtime
 	config  wazero.ModuleConfig
 }
 
-func NewCaptchaPluginPlugin(ctx context.Context, opt CaptchaPluginPluginOption) (*CaptchaPluginPlugin, error) {
+func NewCaptchaPlugin(ctx context.Context, opt CaptchaPluginOption) (*CaptchaPlugin, error) {
 
 	// Create a new WebAssembly Runtime.
 	r := wazero.NewRuntime(ctx)
@@ -44,12 +44,12 @@ func NewCaptchaPluginPlugin(ctx context.Context, opt CaptchaPluginPluginOption) 
 		// By default, I/O streams are discarded and there's no file system.
 		WithStdout(opt.Stdout).WithStderr(opt.Stderr).WithFS(opt.FS)
 
-	return &CaptchaPluginPlugin{
+	return &CaptchaPlugin{
 		runtime: r,
 		config:  config,
 	}, nil
 }
-func (p *CaptchaPluginPlugin) Load(ctx context.Context, pluginPath string) (CaptchaPlugin, error) {
+func (p *CaptchaPlugin) Load(ctx context.Context, pluginPath string) (Captcha, error) {
 	b, err := os.ReadFile(pluginPath)
 	if err != nil {
 		return nil, err
@@ -81,39 +81,39 @@ func (p *CaptchaPluginPlugin) Load(ctx context.Context, pluginPath string) (Capt
 	}
 
 	// Compare API versions with the loading plugin
-	apiVersion := module.ExportedFunction("captcha_plugin_api_version")
+	apiVersion := module.ExportedFunction("captcha_api_version")
 	if apiVersion == nil {
-		return nil, errors.New("captcha_plugin_api_version is not exported")
+		return nil, errors.New("captcha_api_version is not exported")
 	}
 	results, err := apiVersion.Call(ctx)
 	if err != nil {
 		return nil, err
 	} else if len(results) != 1 {
-		return nil, errors.New("invalid captcha_plugin_api_version signature")
+		return nil, errors.New("invalid captcha_api_version signature")
 	}
-	if results[0] != CaptchaPluginPluginAPIVersion {
-		return nil, fmt.Errorf("API version mismatch, host: %d, plugin: %d", CaptchaPluginPluginAPIVersion, results[0])
+	if results[0] != CaptchaPluginAPIVersion {
+		return nil, fmt.Errorf("API version mismatch, host: %d, plugin: %d", CaptchaPluginAPIVersion, results[0])
 	}
 
-	configplugininfo := module.ExportedFunction("captcha_plugin_config_plugin_info")
+	configplugininfo := module.ExportedFunction("captcha_config_plugin_info")
 	if configplugininfo == nil {
-		return nil, errors.New("captcha_plugin_config_plugin_info is not exported")
+		return nil, errors.New("captcha_config_plugin_info is not exported")
 	}
-	verifycaptcha := module.ExportedFunction("captcha_plugin_verify_captcha")
+	verifycaptcha := module.ExportedFunction("captcha_verify_captcha")
 	if verifycaptcha == nil {
-		return nil, errors.New("captcha_plugin_verify_captcha is not exported")
+		return nil, errors.New("captcha_verify_captcha is not exported")
 	}
-	getcustomhtmlinputfield := module.ExportedFunction("captcha_plugin_get_custom_html_input_field")
+	getcustomhtmlinputfield := module.ExportedFunction("captcha_get_custom_html_input_field")
 	if getcustomhtmlinputfield == nil {
-		return nil, errors.New("captcha_plugin_get_custom_html_input_field is not exported")
+		return nil, errors.New("captcha_get_custom_html_input_field is not exported")
 	}
-	getcustomhtmlhead := module.ExportedFunction("captcha_plugin_get_custom_html_head")
+	getcustomhtmlhead := module.ExportedFunction("captcha_get_custom_html_head")
 	if getcustomhtmlhead == nil {
-		return nil, errors.New("captcha_plugin_get_custom_html_head is not exported")
+		return nil, errors.New("captcha_get_custom_html_head is not exported")
 	}
-	getcustomhtmlbodyend := module.ExportedFunction("captcha_plugin_get_custom_html_body_end")
+	getcustomhtmlbodyend := module.ExportedFunction("captcha_get_custom_html_body_end")
 	if getcustomhtmlbodyend == nil {
-		return nil, errors.New("captcha_plugin_get_custom_html_body_end is not exported")
+		return nil, errors.New("captcha_get_custom_html_body_end is not exported")
 	}
 
 	malloc := module.ExportedFunction("malloc")
@@ -125,7 +125,7 @@ func (p *CaptchaPluginPlugin) Load(ctx context.Context, pluginPath string) (Capt
 	if free == nil {
 		return nil, errors.New("free is not exported")
 	}
-	return &captchaPluginPlugin{module: module,
+	return &captchaPlugin{module: module,
 		malloc:                  malloc,
 		free:                    free,
 		configplugininfo:        configplugininfo,
@@ -136,7 +136,7 @@ func (p *CaptchaPluginPlugin) Load(ctx context.Context, pluginPath string) (Capt
 	}, nil
 }
 
-type captchaPluginPlugin struct {
+type captchaPlugin struct {
 	module                  api.Module
 	malloc                  api.Function
 	free                    api.Function
@@ -147,7 +147,7 @@ type captchaPluginPlugin struct {
 	getcustomhtmlbodyend    api.Function
 }
 
-func (p *captchaPluginPlugin) ConfigPluginInfo(ctx context.Context, request ConfigPluginInfoRequest) (response PluginInfo, err error) {
+func (p *captchaPlugin) ConfigPluginInfo(ctx context.Context, request ConfigPluginInfoRequest) (response PluginInfo, err error) {
 	data, err := request.MarshalVT()
 	if err != nil {
 		return response, err
@@ -189,7 +189,7 @@ func (p *captchaPluginPlugin) ConfigPluginInfo(ctx context.Context, request Conf
 
 	return response, nil
 }
-func (p *captchaPluginPlugin) VerifyCaptcha(ctx context.Context, request VerifyCaptchaRequest) (response VerifyCaptchaResponse, err error) {
+func (p *captchaPlugin) VerifyCaptcha(ctx context.Context, request VerifyCaptchaRequest) (response VerifyCaptchaResponse, err error) {
 	data, err := request.MarshalVT()
 	if err != nil {
 		return response, err
@@ -231,7 +231,7 @@ func (p *captchaPluginPlugin) VerifyCaptcha(ctx context.Context, request VerifyC
 
 	return response, nil
 }
-func (p *captchaPluginPlugin) GetCustomHtmlInputField(ctx context.Context, request GetCustomHtmlInputFieldRequest) (response GetCustomHtmlInputFieldResponse, err error) {
+func (p *captchaPlugin) GetCustomHtmlInputField(ctx context.Context, request GetCustomHtmlInputFieldRequest) (response GetCustomHtmlInputFieldResponse, err error) {
 	data, err := request.MarshalVT()
 	if err != nil {
 		return response, err
@@ -273,7 +273,7 @@ func (p *captchaPluginPlugin) GetCustomHtmlInputField(ctx context.Context, reque
 
 	return response, nil
 }
-func (p *captchaPluginPlugin) GetCustomHtmlHead(ctx context.Context, request GetCustomHtmlHeadRequest) (response GetCustomHtmlHeadResponse, err error) {
+func (p *captchaPlugin) GetCustomHtmlHead(ctx context.Context, request GetCustomHtmlHeadRequest) (response GetCustomHtmlHeadResponse, err error) {
 	data, err := request.MarshalVT()
 	if err != nil {
 		return response, err
@@ -315,7 +315,7 @@ func (p *captchaPluginPlugin) GetCustomHtmlHead(ctx context.Context, request Get
 
 	return response, nil
 }
-func (p *captchaPluginPlugin) GetCustomHtmlBodyEnd(ctx context.Context, request GetCustomHtmlBodyEndRequest) (response GetCustomHtmlBodyEndResponse, err error) {
+func (p *captchaPlugin) GetCustomHtmlBodyEnd(ctx context.Context, request GetCustomHtmlBodyEndRequest) (response GetCustomHtmlBodyEndResponse, err error) {
 	data, err := request.MarshalVT()
 	if err != nil {
 		return response, err
