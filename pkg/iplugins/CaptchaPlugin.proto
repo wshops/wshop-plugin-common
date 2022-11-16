@@ -1,0 +1,74 @@
+syntax = "proto3";
+package captcha;
+
+option go_package = "git.jetbrains.space/wshops/wshops/wshop-plugin-common/pkg/captcha";
+
+// go:plugin type=plugin version=1
+service CaptchaPlugin {
+  rpc ConfigPluginInfo(ConfigPluginInfoRequest) returns (PluginInfo);
+
+  // VerifyCaptcha 验证验证码
+  rpc VerifyCaptcha(VerifyCaptchaRequest) returns (VerifyCaptchaResponse);
+
+  // GetCustomHtmlInputField 获取自定义的html输入框
+  rpc GetCustomHtmlInputField(GetCustomHtmlInputFieldRequest) returns (GetCustomHtmlInputFieldResponse);
+
+  // GetCustomHtmlHead 自定义 html 头部中需要加的内容
+  rpc GetCustomHtmlHead(GetCustomHtmlHeadRequest) returns (GetCustomHtmlHeadResponse);
+
+  // GetCustomHtmlBodyEnd 自定义 html body 中最结尾需要加的内容
+  rpc GetCustomHtmlBodyEnd(GetCustomHtmlBodyEndRequest) returns (GetCustomHtmlBodyEndResponse);
+}
+
+message VerifyCaptchaRequest {
+  string captcha = 1;
+}
+
+message VerifyCaptchaResponse {
+  bool isValid = 1;
+}
+
+message GetCustomHtmlInputFieldRequest {}
+
+message GetCustomHtmlInputFieldResponse {
+  string html = 1;
+}
+
+message GetCustomHtmlHeadRequest {}
+message GetCustomHtmlHeadResponse {
+  string html = 1;
+}
+
+message GetCustomHtmlBodyEndRequest {}
+message GetCustomHtmlBodyEndResponse {
+  string html = 1;
+}
+
+//**************************
+//*        commons         *
+//**************************
+message ConfigPluginInfoRequest {}
+message PluginInfo {
+  string Id = 1;
+  string Name = 2;
+  string Version = 3;
+  string Author = 4;
+  string Description = 5;
+  string Icon = 6;
+  repeated PAttributes UserAttributes = 7;
+  repeated PConstants PluginConstant = 8;
+}
+
+message PAttributes {
+  string Key = 1;
+  string Name = 2;
+  string Description = 3;
+  string Type = 4;
+  string VRule = 5;
+  string VMsg = 6;
+}
+
+message PConstants {
+  string Key = 1;
+  string Value = 2;
+}

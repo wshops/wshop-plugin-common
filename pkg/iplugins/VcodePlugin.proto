@@ -1,0 +1,54 @@
+syntax = "proto3";
+package captcha;
+
+option go_package = "git.jetbrains.space/wshops/wshops/wshop-plugin-common/pkg/iplugins";
+
+// go:plugin type=plugin version=1
+service VCodePlugin {
+  rpc SendVerificationCode(SendVerificationCodeRequest) returns (SendVerificationCodeResponse);
+}
+
+enum SendType {
+  EMAIL = 0;
+  SMS = 1;
+  OTHER = 3;
+}
+message SendVerificationCodeRequest {
+  SendType sendType = 1;
+  string target = 2;
+  string code = 3;
+}
+
+message SendVerificationCodeResponse {
+  bool success = 1;
+  string error = 2;
+}
+
+//**************************
+//*        commons         *
+//**************************
+message ConfigPluginInfoRequest {}
+message PluginInfo {
+  string Id = 1;
+  string Name = 2;
+  string Version = 3;
+  string Author = 4;
+  string Description = 5;
+  string Icon = 6;
+  repeated PAttributes UserAttributes = 7;
+  repeated PConstants PluginConstant = 8;
+}
+
+message PAttributes {
+  string Key = 1;
+  string Name = 2;
+  string Description = 3;
+  string Type = 4;
+  string VRule = 5;
+  string VMsg = 6;
+}
+
+message PConstants {
+  string Key = 1;
+  string Value = 2;
+}
