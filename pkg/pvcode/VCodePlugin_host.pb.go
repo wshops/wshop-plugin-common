@@ -12,6 +12,7 @@ import (
 	context "context"
 	errors "errors"
 	fmt "fmt"
+	emptypb "github.com/knqyf263/go-plugin/types/known/emptypb"
 	wazero "github.com/tetratelabs/wazero"
 	api "github.com/tetratelabs/wazero/api"
 	wasi_snapshot_preview1 "github.com/tetratelabs/wazero/imports/wasi_snapshot_preview1"
@@ -103,6 +104,10 @@ func (p *VCodePlugin) Load(ctx context.Context, pluginPath string) (VCode, error
 		return nil, fmt.Errorf("API version mismatch, host: %d, plugin: %d", VCodePluginAPIVersion, results[0])
 	}
 
+	configplugininfo := module.ExportedFunction("v_code_config_plugin_info")
+	if configplugininfo == nil {
+		return nil, errors.New("v_code_config_plugin_info is not exported")
+	}
 	sendverificationcode := module.ExportedFunction("v_code_send_verification_code")
 	if sendverificationcode == nil {
 		return nil, errors.New("v_code_send_verification_code is not exported")
@@ -120,6 +125,7 @@ func (p *VCodePlugin) Load(ctx context.Context, pluginPath string) (VCode, error
 	return &vCodePlugin{module: module,
 		malloc:               malloc,
 		free:                 free,
+		configplugininfo:     configplugininfo,
 		sendverificationcode: sendverificationcode,
 	}, nil
 }
@@ -128,9 +134,55 @@ type vCodePlugin struct {
 	module               api.Module
 	malloc               api.Function
 	free                 api.Function
+	configplugininfo     api.Function
 	sendverificationcode api.Function
 }
 
+func (p *vCodePlugin) ConfigPluginInfo(ctx context.Context, request emptypb.Empty) (response PluginInfo, err error) {
+	data, err := request.MarshalVT()
+	if err != nil {
+		return response, err
+	}
+	dataSize := uint64(len(data))
+	if dataSize == 0 {
+		return response, nil
+	}
+	results, err := p.malloc.Call(ctx, dataSize)
+	if err != nil {
+		return response, err
+	}
+
+	dataPtr := results[0]
+	// This pointer is managed by TinyGo, but TinyGo is unaware of external usage.
+	// So, we have to free it when finished
+	defer p.free.Call(ctx, dataPtr)
+
+	// The pointer is a linear memory offset, which is where we write the name.
+	if !p.module.Memory().Write(ctx, uint32(dataPtr), data) {
+		return response, fmt.Errorf("Memory.Write(%d, %d) out of range of memory size %d", dataPtr, dataSize, p.module.Memory().Size(ctx))
+	}
+	ptrSize, err := p.configplugininfo.Call(ctx, dataPtr, dataSize)
+	if err != nil {
+		return response, err
+	}
+
+	// Note: This pointer is still owned by TinyGo, so don't try to free it!
+	resPtr := uint32(ptrSize[0] >> 32)
+	resSize := uint32(ptrSize[0])
+
+	// The pointer is a linear memory offset, which is where we write the name.
+	bytes, ok := p.module.Memory().Read(ctx, resPtr, resSize)
+	if !ok {
+		return response, fmt.Errorf("Memory.Read(%d, %d) out of range of memory size %d",
+			resPtr, resSize, p.module.Memory().Size(ctx))
+	}
+
+	if err = response.UnmarshalVT(bytes); err != nil {
+		return response, err
+	}
+
+	return response, nil
+}
 func (p *vCodePlugin) SendVerificationCode(ctx context.Context, request SendVerificationCodeRequest) (response SendVerificationCodeResponse, err error) {
 	data, err := request.MarshalVT()
 	if err != nil {

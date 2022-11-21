@@ -1,11 +1,12 @@
 syntax = "proto3";
 package pcaptcha;
+import "google/protobuf/empty.proto";
 
 option go_package = "github.com/wshops/wshop-plugin-common/pkg/pcaptcha";
 
 // go:plugin type=plugin version=1
 service Captcha {
-  rpc ConfigPluginInfo(ConfigPluginInfoRequest) returns (PluginInfo);
+  rpc ConfigPluginInfo(google.protobuf.Empty) returns (PluginInfo);
 
   // VerifyCaptcha 验证验证码
   rpc VerifyCaptcha(VerifyCaptchaRequest) returns (VerifyCaptchaResponse);

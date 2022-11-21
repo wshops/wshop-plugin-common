@@ -10,6 +10,7 @@ package pcaptcha
 
 import (
 	context "context"
+	emptypb "github.com/knqyf263/go-plugin/types/known/emptypb"
 	wasm "github.com/knqyf263/go-plugin/wasm"
 )
 
@@ -29,7 +30,7 @@ func RegisterCaptcha(p Captcha) {
 //export captcha_config_plugin_info
 func _captcha_config_plugin_info(ptr, size uint32) uint64 {
 	b := wasm.PtrToByte(ptr, size)
-	var req ConfigPluginInfoRequest
+	var req emptypb.Empty
 	if err := req.UnmarshalVT(b); err != nil {
 		return 0
 	}

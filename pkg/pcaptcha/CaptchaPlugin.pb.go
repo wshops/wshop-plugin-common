@@ -8,6 +8,7 @@ package pcaptcha
 
 import (
 	context "context"
+	emptypb "github.com/knqyf263/go-plugin/types/known/emptypb"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 )
@@ -320,7 +321,7 @@ func (x *PConstants) GetValue() string {
 
 // go:plugin type=plugin version=1
 type Captcha interface {
-	ConfigPluginInfo(context.Context, ConfigPluginInfoRequest) (PluginInfo, error)
+	ConfigPluginInfo(context.Context, emptypb.Empty) (PluginInfo, error)
 	// VerifyCaptcha 验证验证码
 	VerifyCaptcha(context.Context, VerifyCaptchaRequest) (VerifyCaptchaResponse, error)
 	// GetCustomHtmlInputField 获取自定义的html输入框

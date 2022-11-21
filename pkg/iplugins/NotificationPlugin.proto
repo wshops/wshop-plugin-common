@@ -1,11 +1,12 @@
 syntax = "proto3";
 package pvcode;
+import "google/protobuf/empty.proto";
 
 option go_package = "github.com/wshops/wshop-plugin-common/pkg/pvcode";
 
 // go:plugin type=plugin version=1
 service Notification {
-  rpc ConfigPluginInfo(ConfigPluginInfoRequest) returns (PluginInfo);
+  rpc ConfigPluginInfo(google.protobuf.Empty) returns (PluginInfo);
   rpc SendNotification(SendNotificationRequest) returns (SendNotificationResponse);
 }
 

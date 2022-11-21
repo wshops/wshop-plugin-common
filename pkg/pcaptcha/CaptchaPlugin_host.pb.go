@@ -12,6 +12,7 @@ import (
 	context "context"
 	errors "errors"
 	fmt "fmt"
+	emptypb "github.com/knqyf263/go-plugin/types/known/emptypb"
 	wazero "github.com/tetratelabs/wazero"
 	api "github.com/tetratelabs/wazero/api"
 	wasi_snapshot_preview1 "github.com/tetratelabs/wazero/imports/wasi_snapshot_preview1"
@@ -155,7 +156,7 @@ type captchaPlugin struct {
 	getcustomhtmlbodyend    api.Function
 }
 
-func (p *captchaPlugin) ConfigPluginInfo(ctx context.Context, request ConfigPluginInfoRequest) (response PluginInfo, err error) {
+func (p *captchaPlugin) ConfigPluginInfo(ctx context.Context, request emptypb.Empty) (response PluginInfo, err error) {
 	data, err := request.MarshalVT()
 	if err != nil {
 		return response, err

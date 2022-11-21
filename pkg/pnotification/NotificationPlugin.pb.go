@@ -8,6 +8,7 @@ package pvcode
 
 import (
 	context "context"
+	emptypb "github.com/knqyf263/go-plugin/types/known/emptypb"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 )
@@ -257,6 +258,6 @@ func (x *PConstants) GetValue() string {
 
 // go:plugin type=plugin version=1
 type Notification interface {
-	ConfigPluginInfo(context.Context, ConfigPluginInfoRequest) (PluginInfo, error)
+	ConfigPluginInfo(context.Context, emptypb.Empty) (PluginInfo, error)
 	SendNotification(context.Context, SendNotificationRequest) (SendNotificationResponse, error)
 }
