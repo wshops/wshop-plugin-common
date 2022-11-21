@@ -49,6 +49,14 @@ func NewNotificationPlugin(ctx context.Context, opt NotificationPluginOption) (*
 		config:  config,
 	}, nil
 }
+
+func (p *NotificationPlugin) Close(ctx context.Context) (err error) {
+	if r := p.runtime; r != nil {
+		err = r.Close(ctx)
+	}
+	return
+}
+
 func (p *NotificationPlugin) Load(ctx context.Context, pluginPath string) (Notification, error) {
 	b, err := os.ReadFile(pluginPath)
 	if err != nil {
@@ -135,6 +143,9 @@ func (p *notificationPlugin) ConfigPluginInfo(ctx context.Context, request Confi
 		return response, err
 	}
 	dataSize := uint64(len(data))
+	if dataSize == 0 {
+		return response, nil
+	}
 	results, err := p.malloc.Call(ctx, dataSize)
 	if err != nil {
 		return response, err
@@ -177,6 +188,9 @@ func (p *notificationPlugin) SendNotification(ctx context.Context, request SendN
 		return response, err
 	}
 	dataSize := uint64(len(data))
+	if dataSize == 0 {
+		return response, nil
+	}
 	results, err := p.malloc.Call(ctx, dataSize)
 	if err != nil {
 		return response, err

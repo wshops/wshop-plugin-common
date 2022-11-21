@@ -1,7 +1,7 @@
 syntax = "proto3";
 package pcaptcha;
 
-option go_package = "git.jetbrains.space/wshops/wshops/wshop-plugin-common/pkg/pcaptcha";
+option go_package = "github.com/wshops/wshop-plugin-common/pkg/pcaptcha";
 
 // go:plugin type=plugin version=1
 service Captcha {

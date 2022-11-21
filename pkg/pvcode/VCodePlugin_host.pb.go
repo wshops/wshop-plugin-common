@@ -49,6 +49,14 @@ func NewVCodePlugin(ctx context.Context, opt VCodePluginOption) (*VCodePlugin, e
 		config:  config,
 	}, nil
 }
+
+func (p *VCodePlugin) Close(ctx context.Context) (err error) {
+	if r := p.runtime; r != nil {
+		err = r.Close(ctx)
+	}
+	return
+}
+
 func (p *VCodePlugin) Load(ctx context.Context, pluginPath string) (VCode, error) {
 	b, err := os.ReadFile(pluginPath)
 	if err != nil {
@@ -129,6 +137,9 @@ func (p *vCodePlugin) SendVerificationCode(ctx context.Context, request SendVeri
 		return response, err
 	}
 	dataSize := uint64(len(data))
+	if dataSize == 0 {
+		return response, nil
+	}
 	results, err := p.malloc.Call(ctx, dataSize)
 	if err != nil {
 		return response, err

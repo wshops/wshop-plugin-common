@@ -49,6 +49,14 @@ func NewCaptchaPlugin(ctx context.Context, opt CaptchaPluginOption) (*CaptchaPlu
 		config:  config,
 	}, nil
 }
+
+func (p *CaptchaPlugin) Close(ctx context.Context) (err error) {
+	if r := p.runtime; r != nil {
+		err = r.Close(ctx)
+	}
+	return
+}
+
 func (p *CaptchaPlugin) Load(ctx context.Context, pluginPath string) (Captcha, error) {
 	b, err := os.ReadFile(pluginPath)
 	if err != nil {
@@ -153,6 +161,9 @@ func (p *captchaPlugin) ConfigPluginInfo(ctx context.Context, request ConfigPlug
 		return response, err
 	}
 	dataSize := uint64(len(data))
+	if dataSize == 0 {
+		return response, nil
+	}
 	results, err := p.malloc.Call(ctx, dataSize)
 	if err != nil {
 		return response, err
@@ -195,6 +206,9 @@ func (p *captchaPlugin) VerifyCaptcha(ctx context.Context, request VerifyCaptcha
 		return response, err
 	}
 	dataSize := uint64(len(data))
+	if dataSize == 0 {
+		return response, nil
+	}
 	results, err := p.malloc.Call(ctx, dataSize)
 	if err != nil {
 		return response, err
@@ -237,6 +251,9 @@ func (p *captchaPlugin) GetCustomHtmlInputField(ctx context.Context, request Get
 		return response, err
 	}
 	dataSize := uint64(len(data))
+	if dataSize == 0 {
+		return response, nil
+	}
 	results, err := p.malloc.Call(ctx, dataSize)
 	if err != nil {
 		return response, err
@@ -279,6 +296,9 @@ func (p *captchaPlugin) GetCustomHtmlHead(ctx context.Context, request GetCustom
 		return response, err
 	}
 	dataSize := uint64(len(data))
+	if dataSize == 0 {
+		return response, nil
+	}
 	results, err := p.malloc.Call(ctx, dataSize)
 	if err != nil {
 		return response, err
@@ -321,6 +341,9 @@ func (p *captchaPlugin) GetCustomHtmlBodyEnd(ctx context.Context, request GetCus
 		return response, err
 	}
 	dataSize := uint64(len(data))
+	if dataSize == 0 {
+		return response, nil
+	}
 	results, err := p.malloc.Call(ctx, dataSize)
 	if err != nil {
 		return response, err
