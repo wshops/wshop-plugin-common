@@ -11,12 +11,12 @@ service Notification {
 }
 
 message SendNotificationRequest {
-  string target = 1;
-  string title = 2;
-  string content = 3;
+  string target = 2;
+  string title = 4;
+  string content = 6;
 }
 
 message SendNotificationResponse {
-  bool success = 1;
-  string error = 2;
+  bool success = 2;
+  string error = 4;
 }

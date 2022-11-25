@@ -70,7 +70,7 @@ func _captcha_verify_captcha(ptr, size uint32) uint64 {
 //export captcha_get_custom_html_input_field
 func _captcha_get_custom_html_input_field(ptr, size uint32) uint64 {
 	b := wasm.PtrToByte(ptr, size)
-	var req GetCustomHtmlInputFieldRequest
+	var req emptypb.Empty
 	if err := req.UnmarshalVT(b); err != nil {
 		return 0
 	}
@@ -90,7 +90,7 @@ func _captcha_get_custom_html_input_field(ptr, size uint32) uint64 {
 //export captcha_get_custom_html_head
 func _captcha_get_custom_html_head(ptr, size uint32) uint64 {
 	b := wasm.PtrToByte(ptr, size)
-	var req GetCustomHtmlHeadRequest
+	var req emptypb.Empty
 	if err := req.UnmarshalVT(b); err != nil {
 		return 0
 	}
@@ -110,7 +110,7 @@ func _captcha_get_custom_html_head(ptr, size uint32) uint64 {
 //export captcha_get_custom_html_body_end
 func _captcha_get_custom_html_body_end(ptr, size uint32) uint64 {
 	b := wasm.PtrToByte(ptr, size)
-	var req GetCustomHtmlBodyEndRequest
+	var req emptypb.Empty
 	if err := req.UnmarshalVT(b); err != nil {
 		return 0
 	}

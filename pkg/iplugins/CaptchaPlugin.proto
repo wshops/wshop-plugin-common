@@ -23,21 +23,21 @@ service Captcha {
 }
 
 message VerifyCaptchaRequest {
-  string captcha = 1;
+  string captcha = 2;
 }
 
 message VerifyCaptchaResponse {
-  bool isValid = 1;
+  bool isValid = 2;
 }
 
 message GetCustomHtmlInputFieldResponse {
-  string html = 1;
+  string html = 20;
 }
 
 message GetCustomHtmlHeadResponse {
-  string html = 1;
+  string html = 20;
 }
 
 message GetCustomHtmlBodyEndResponse {
-  string html = 1;
+  string html = 20;
 }

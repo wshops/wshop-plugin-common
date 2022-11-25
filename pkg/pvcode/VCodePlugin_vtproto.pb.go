@@ -107,7 +107,7 @@ func (m *SendVerificationCodeResponse) MarshalToSizedBufferVT(dAtA []byte) (int,
 		copy(dAtA[i:], m.Error)
 		i = encodeVarint(dAtA, i, uint64(len(m.Error)))
 		i--
-		dAtA[i] = 0x12
+		dAtA[i] = 0x22
 	}
 	if m.Success {
 		i--
@@ -117,7 +117,7 @@ func (m *SendVerificationCodeResponse) MarshalToSizedBufferVT(dAtA []byte) (int,
 			dAtA[i] = 0
 		}
 		i--
-		dAtA[i] = 0x8
+		dAtA[i] = 0x10
 	}
 	return len(dAtA) - i, nil
 }
@@ -344,7 +344,7 @@ func (m *SendVerificationCodeResponse) UnmarshalVT(dAtA []byte) error {
 			return fmt.Errorf("proto: SendVerificationCodeResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
-		case 1:
+		case 2:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Success", wireType)
 			}
@@ -364,7 +364,7 @@ func (m *SendVerificationCodeResponse) UnmarshalVT(dAtA []byte) error {
 				}
 			}
 			m.Success = bool(v != 0)
-		case 2:
+		case 4:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Error", wireType)
 			}

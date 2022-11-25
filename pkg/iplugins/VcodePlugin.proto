@@ -23,6 +23,6 @@ message SendVerificationCodeRequest {
 }
 
 message SendVerificationCodeResponse {
-  bool success = 1;
-  string error = 2;
+  bool success = 2;
+  string error = 4;
 }

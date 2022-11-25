@@ -21,29 +21,19 @@ const (
 // **************************
 // *        commons         *
 // **************************
-type ConfigPluginInfoRequest struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-}
-
-func (x *ConfigPluginInfoRequest) ProtoReflect() protoreflect.Message {
-	panic(`not implemented`)
-}
-
 type PluginInfo struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id             string            `protobuf:"bytes,1,opt,name=Id,proto3" json:"Id,omitempty"`
-	Name           string            `protobuf:"bytes,2,opt,name=Name,proto3" json:"Name,omitempty"`
-	Version        string            `protobuf:"bytes,3,opt,name=Version,proto3" json:"Version,omitempty"`
-	Author         string            `protobuf:"bytes,4,opt,name=Author,proto3" json:"Author,omitempty"`
-	Description    string            `protobuf:"bytes,5,opt,name=Description,proto3" json:"Description,omitempty"`
-	Icon           string            `protobuf:"bytes,6,opt,name=Icon,proto3" json:"Icon,omitempty"`
-	PluginConstant map[string]string `protobuf:"bytes,7,rep,name=PluginConstant,proto3" json:"PluginConstant,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
-	UserAttributes []*PAttributes    `protobuf:"bytes,8,rep,name=UserAttributes,proto3" json:"UserAttributes,omitempty"`
+	Id              string                      `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Name            string                      `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	Version         string                      `protobuf:"bytes,3,opt,name=version,proto3" json:"version,omitempty"`
+	Author          string                      `protobuf:"bytes,4,opt,name=author,proto3" json:"author,omitempty"`
+	Description     string                      `protobuf:"bytes,5,opt,name=description,proto3" json:"description,omitempty"`
+	IconUrl         string                      `protobuf:"bytes,6,opt,name=icon_url,json=iconUrl,proto3" json:"icon_url,omitempty"`
+	PluginConstants map[string]string           `protobuf:"bytes,10,rep,name=plugin_constants,json=pluginConstants,proto3" json:"plugin_constants,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	UserAttributes  map[string]*PluginAttribute `protobuf:"bytes,15,rep,name=user_attributes,json=userAttributes,proto3" json:"user_attributes,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 }
 
 func (x *PluginInfo) ProtoReflect() protoreflect.Message {
@@ -85,80 +75,72 @@ func (x *PluginInfo) GetDescription() string {
 	return ""
 }
 
-func (x *PluginInfo) GetIcon() string {
+func (x *PluginInfo) GetIconUrl() string {
 	if x != nil {
-		return x.Icon
+		return x.IconUrl
 	}
 	return ""
 }
 
-func (x *PluginInfo) GetPluginConstant() map[string]string {
+func (x *PluginInfo) GetPluginConstants() map[string]string {
 	if x != nil {
-		return x.PluginConstant
+		return x.PluginConstants
 	}
 	return nil
 }
 
-func (x *PluginInfo) GetUserAttributes() []*PAttributes {
+func (x *PluginInfo) GetUserAttributes() map[string]*PluginAttribute {
 	if x != nil {
 		return x.UserAttributes
 	}
 	return nil
 }
 
-type PAttributes struct {
+type PluginAttribute struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Key         string `protobuf:"bytes,1,opt,name=Key,proto3" json:"Key,omitempty"`
-	Name        string `protobuf:"bytes,2,opt,name=Name,proto3" json:"Name,omitempty"`
-	Description string `protobuf:"bytes,3,opt,name=Description,proto3" json:"Description,omitempty"`
-	Type        string `protobuf:"bytes,4,opt,name=Type,proto3" json:"Type,omitempty"`
-	VRule       string `protobuf:"bytes,5,opt,name=VRule,proto3" json:"VRule,omitempty"`
-	VMsg        string `protobuf:"bytes,6,opt,name=VMsg,proto3" json:"VMsg,omitempty"`
+	Name        string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	Description string `protobuf:"bytes,4,opt,name=description,proto3" json:"description,omitempty"`
+	Type        string `protobuf:"bytes,6,opt,name=type,proto3" json:"type,omitempty"`
+	VRule       string `protobuf:"bytes,8,opt,name=v_rule,json=vRule,proto3" json:"v_rule,omitempty"`
+	VMsg        string `protobuf:"bytes,10,opt,name=v_msg,json=vMsg,proto3" json:"v_msg,omitempty"`
 }
 
-func (x *PAttributes) ProtoReflect() protoreflect.Message {
+func (x *PluginAttribute) ProtoReflect() protoreflect.Message {
 	panic(`not implemented`)
 }
 
-func (x *PAttributes) GetKey() string {
-	if x != nil {
-		return x.Key
-	}
-	return ""
-}
-
-func (x *PAttributes) GetName() string {
+func (x *PluginAttribute) GetName() string {
 	if x != nil {
 		return x.Name
 	}
 	return ""
 }
 
-func (x *PAttributes) GetDescription() string {
+func (x *PluginAttribute) GetDescription() string {
 	if x != nil {
 		return x.Description
 	}
 	return ""
 }
 
-func (x *PAttributes) GetType() string {
+func (x *PluginAttribute) GetType() string {
 	if x != nil {
 		return x.Type
 	}
 	return ""
 }
 
-func (x *PAttributes) GetVRule() string {
+func (x *PluginAttribute) GetVRule() string {
 	if x != nil {
 		return x.VRule
 	}
 	return ""
 }
 
-func (x *PAttributes) GetVMsg() string {
+func (x *PluginAttribute) GetVMsg() string {
 	if x != nil {
 		return x.VMsg
 	}

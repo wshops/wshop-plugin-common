@@ -4,23 +4,21 @@ option go_package = "github.com/wshops/wshop-plugin-common/pkg/wpc";
 //**************************
 //*        commons         *
 //**************************
-message ConfigPluginInfoRequest {}
 message PluginInfo {
-  string Id = 1;
-  string Name = 2;
-  string Version = 3;
-  string Author = 4;
-  string Description = 5;
-  string Icon = 6;
-  map<string,string> PluginConstant = 7;
-  repeated PAttributes UserAttributes = 8;
+  string id = 1;
+  string name = 2;
+  string version = 3;
+  string author = 4;
+  string description = 5;
+  string icon_url = 6;
+  map<string,string> plugin_constants = 10;
+  map<string,PluginAttribute> user_attributes = 15;
 }
 
-message PAttributes {
-  string Key = 1;
-  string Name = 2;
-  string Description = 3;
-  string Type = 4;
-  string VRule = 5;
-  string VMsg = 6;
+message PluginAttribute {
+  string name = 2;
+  string description = 4;
+  string type = 6;
+  string v_rule = 8;
+  string v_msg = 10;
 }

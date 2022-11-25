@@ -55,21 +55,21 @@ func (m *SendNotificationRequest) MarshalToSizedBufferVT(dAtA []byte) (int, erro
 		copy(dAtA[i:], m.Content)
 		i = encodeVarint(dAtA, i, uint64(len(m.Content)))
 		i--
-		dAtA[i] = 0x1a
+		dAtA[i] = 0x32
 	}
 	if len(m.Title) > 0 {
 		i -= len(m.Title)
 		copy(dAtA[i:], m.Title)
 		i = encodeVarint(dAtA, i, uint64(len(m.Title)))
 		i--
-		dAtA[i] = 0x12
+		dAtA[i] = 0x22
 	}
 	if len(m.Target) > 0 {
 		i -= len(m.Target)
 		copy(dAtA[i:], m.Target)
 		i = encodeVarint(dAtA, i, uint64(len(m.Target)))
 		i--
-		dAtA[i] = 0xa
+		dAtA[i] = 0x12
 	}
 	return len(dAtA) - i, nil
 }
@@ -109,7 +109,7 @@ func (m *SendNotificationResponse) MarshalToSizedBufferVT(dAtA []byte) (int, err
 		copy(dAtA[i:], m.Error)
 		i = encodeVarint(dAtA, i, uint64(len(m.Error)))
 		i--
-		dAtA[i] = 0x12
+		dAtA[i] = 0x22
 	}
 	if m.Success {
 		i--
@@ -119,7 +119,7 @@ func (m *SendNotificationResponse) MarshalToSizedBufferVT(dAtA []byte) (int, err
 			dAtA[i] = 0
 		}
 		i--
-		dAtA[i] = 0x8
+		dAtA[i] = 0x10
 	}
 	return len(dAtA) - i, nil
 }
@@ -213,7 +213,7 @@ func (m *SendNotificationRequest) UnmarshalVT(dAtA []byte) error {
 			return fmt.Errorf("proto: SendNotificationRequest: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
-		case 1:
+		case 2:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Target", wireType)
 			}
@@ -245,7 +245,7 @@ func (m *SendNotificationRequest) UnmarshalVT(dAtA []byte) error {
 			}
 			m.Target = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
-		case 2:
+		case 4:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Title", wireType)
 			}
@@ -277,7 +277,7 @@ func (m *SendNotificationRequest) UnmarshalVT(dAtA []byte) error {
 			}
 			m.Title = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
-		case 3:
+		case 6:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Content", wireType)
 			}
@@ -360,7 +360,7 @@ func (m *SendNotificationResponse) UnmarshalVT(dAtA []byte) error {
 			return fmt.Errorf("proto: SendNotificationResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
-		case 1:
+		case 2:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Success", wireType)
 			}
@@ -380,7 +380,7 @@ func (m *SendNotificationResponse) UnmarshalVT(dAtA []byte) error {
 				}
 			}
 			m.Success = bool(v != 0)
-		case 2:
+		case 4:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Error", wireType)
 			}

@@ -247,7 +247,7 @@ func (p *captchaPlugin) VerifyCaptcha(ctx context.Context, request VerifyCaptcha
 
 	return response, nil
 }
-func (p *captchaPlugin) GetCustomHtmlInputField(ctx context.Context, request GetCustomHtmlInputFieldRequest) (response GetCustomHtmlInputFieldResponse, err error) {
+func (p *captchaPlugin) GetCustomHtmlInputField(ctx context.Context, request emptypb.Empty) (response GetCustomHtmlInputFieldResponse, err error) {
 	data, err := request.MarshalVT()
 	if err != nil {
 		return response, err
@@ -292,7 +292,7 @@ func (p *captchaPlugin) GetCustomHtmlInputField(ctx context.Context, request Get
 
 	return response, nil
 }
-func (p *captchaPlugin) GetCustomHtmlHead(ctx context.Context, request GetCustomHtmlHeadRequest) (response GetCustomHtmlHeadResponse, err error) {
+func (p *captchaPlugin) GetCustomHtmlHead(ctx context.Context, request emptypb.Empty) (response GetCustomHtmlHeadResponse, err error) {
 	data, err := request.MarshalVT()
 	if err != nil {
 		return response, err
@@ -337,7 +337,7 @@ func (p *captchaPlugin) GetCustomHtmlHead(ctx context.Context, request GetCustom
 
 	return response, nil
 }
-func (p *captchaPlugin) GetCustomHtmlBodyEnd(ctx context.Context, request GetCustomHtmlBodyEndRequest) (response GetCustomHtmlBodyEndResponse, err error) {
+func (p *captchaPlugin) GetCustomHtmlBodyEnd(ctx context.Context, request emptypb.Empty) (response GetCustomHtmlBodyEndResponse, err error) {
 	data, err := request.MarshalVT()
 	if err != nil {
 		return response, err

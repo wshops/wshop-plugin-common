@@ -26,7 +26,7 @@ type VerifyCaptchaRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Captcha string `protobuf:"bytes,1,opt,name=captcha,proto3" json:"captcha,omitempty"`
+	Captcha string `protobuf:"bytes,2,opt,name=captcha,proto3" json:"captcha,omitempty"`
 }
 
 func (x *VerifyCaptchaRequest) ProtoReflect() protoreflect.Message {
@@ -45,7 +45,7 @@ type VerifyCaptchaResponse struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	IsValid bool `protobuf:"varint,1,opt,name=isValid,proto3" json:"isValid,omitempty"`
+	IsValid bool `protobuf:"varint,2,opt,name=isValid,proto3" json:"isValid,omitempty"`
 }
 
 func (x *VerifyCaptchaResponse) ProtoReflect() protoreflect.Message {
@@ -59,22 +59,12 @@ func (x *VerifyCaptchaResponse) GetIsValid() bool {
 	return false
 }
 
-type GetCustomHtmlInputFieldRequest struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-}
-
-func (x *GetCustomHtmlInputFieldRequest) ProtoReflect() protoreflect.Message {
-	panic(`not implemented`)
-}
-
 type GetCustomHtmlInputFieldResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Html string `protobuf:"bytes,1,opt,name=html,proto3" json:"html,omitempty"`
+	Html string `protobuf:"bytes,20,opt,name=html,proto3" json:"html,omitempty"`
 }
 
 func (x *GetCustomHtmlInputFieldResponse) ProtoReflect() protoreflect.Message {
@@ -88,22 +78,12 @@ func (x *GetCustomHtmlInputFieldResponse) GetHtml() string {
 	return ""
 }
 
-type GetCustomHtmlHeadRequest struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-}
-
-func (x *GetCustomHtmlHeadRequest) ProtoReflect() protoreflect.Message {
-	panic(`not implemented`)
-}
-
 type GetCustomHtmlHeadResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Html string `protobuf:"bytes,1,opt,name=html,proto3" json:"html,omitempty"`
+	Html string `protobuf:"bytes,20,opt,name=html,proto3" json:"html,omitempty"`
 }
 
 func (x *GetCustomHtmlHeadResponse) ProtoReflect() protoreflect.Message {
@@ -117,22 +97,12 @@ func (x *GetCustomHtmlHeadResponse) GetHtml() string {
 	return ""
 }
 
-type GetCustomHtmlBodyEndRequest struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-}
-
-func (x *GetCustomHtmlBodyEndRequest) ProtoReflect() protoreflect.Message {
-	panic(`not implemented`)
-}
-
 type GetCustomHtmlBodyEndResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Html string `protobuf:"bytes,1,opt,name=html,proto3" json:"html,omitempty"`
+	Html string `protobuf:"bytes,20,opt,name=html,proto3" json:"html,omitempty"`
 }
 
 func (x *GetCustomHtmlBodyEndResponse) ProtoReflect() protoreflect.Message {
@@ -152,9 +122,9 @@ type Captcha interface {
 	// VerifyCaptcha 验证验证码
 	VerifyCaptcha(context.Context, VerifyCaptchaRequest) (VerifyCaptchaResponse, error)
 	// GetCustomHtmlInputField 获取自定义的html输入框
-	GetCustomHtmlInputField(context.Context, GetCustomHtmlInputFieldRequest) (GetCustomHtmlInputFieldResponse, error)
+	GetCustomHtmlInputField(context.Context, emptypb.Empty) (GetCustomHtmlInputFieldResponse, error)
 	// GetCustomHtmlHead 自定义 html 头部中需要加的内容
-	GetCustomHtmlHead(context.Context, GetCustomHtmlHeadRequest) (GetCustomHtmlHeadResponse, error)
+	GetCustomHtmlHead(context.Context, emptypb.Empty) (GetCustomHtmlHeadResponse, error)
 	// GetCustomHtmlBodyEnd 自定义 html body 中最结尾需要加的内容
-	GetCustomHtmlBodyEnd(context.Context, GetCustomHtmlBodyEndRequest) (GetCustomHtmlBodyEndResponse, error)
+	GetCustomHtmlBodyEnd(context.Context, emptypb.Empty) (GetCustomHtmlBodyEndResponse, error)
 }

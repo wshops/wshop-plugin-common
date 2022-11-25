@@ -26,9 +26,9 @@ type SendNotificationRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Target  string `protobuf:"bytes,1,opt,name=target,proto3" json:"target,omitempty"`
-	Title   string `protobuf:"bytes,2,opt,name=title,proto3" json:"title,omitempty"`
-	Content string `protobuf:"bytes,3,opt,name=content,proto3" json:"content,omitempty"`
+	Target  string `protobuf:"bytes,2,opt,name=target,proto3" json:"target,omitempty"`
+	Title   string `protobuf:"bytes,4,opt,name=title,proto3" json:"title,omitempty"`
+	Content string `protobuf:"bytes,6,opt,name=content,proto3" json:"content,omitempty"`
 }
 
 func (x *SendNotificationRequest) ProtoReflect() protoreflect.Message {
@@ -61,8 +61,8 @@ type SendNotificationResponse struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Success bool   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
-	Error   string `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
+	Success bool   `protobuf:"varint,2,opt,name=success,proto3" json:"success,omitempty"`
+	Error   string `protobuf:"bytes,4,opt,name=error,proto3" json:"error,omitempty"`
 }
 
 func (x *SendNotificationResponse) ProtoReflect() protoreflect.Message {
