@@ -26,7 +26,7 @@ type SendType int32
 const (
 	SendType_EMAIL SendType = 0
 	SendType_SMS   SendType = 1
-	SendType_OTHER SendType = 3
+	SendType_OTHER SendType = 5
 )
 
 // Enum value maps for SendType.
@@ -34,12 +34,12 @@ var (
 	SendType_name = map[int32]string{
 		0: "EMAIL",
 		1: "SMS",
-		3: "OTHER",
+		5: "OTHER",
 	}
 	SendType_value = map[string]int32{
 		"EMAIL": 0,
 		"SMS":   1,
-		"OTHER": 3,
+		"OTHER": 5,
 	}
 )
 

@@ -14,7 +14,7 @@ service VCode {
 enum SendType {
   EMAIL = 0;
   SMS = 1;
-  OTHER = 3;
+  OTHER = 5;
 }
 message SendVerificationCodeRequest {
   SendType sendType = 1;
