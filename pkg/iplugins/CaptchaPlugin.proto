@@ -13,13 +13,13 @@ service Captcha {
   rpc VerifyCaptcha(VerifyCaptchaRequest) returns (VerifyCaptchaResponse);
 
   // GetCustomHtmlInputField 获取自定义的html输入框
-  rpc GetCustomHtmlInputField(GetCustomHtmlInputFieldRequest) returns (GetCustomHtmlInputFieldResponse);
+  rpc GetCustomHtmlInputField(google.protobuf.Empty) returns (GetCustomHtmlInputFieldResponse);
 
   // GetCustomHtmlHead 自定义 html 头部中需要加的内容
-  rpc GetCustomHtmlHead(GetCustomHtmlHeadRequest) returns (GetCustomHtmlHeadResponse);
+  rpc GetCustomHtmlHead(google.protobuf.Empty) returns (GetCustomHtmlHeadResponse);
 
   // GetCustomHtmlBodyEnd 自定义 html body 中最结尾需要加的内容
-  rpc GetCustomHtmlBodyEnd(GetCustomHtmlBodyEndRequest) returns (GetCustomHtmlBodyEndResponse);
+  rpc GetCustomHtmlBodyEnd(google.protobuf.Empty) returns (GetCustomHtmlBodyEndResponse);
 }
 
 message VerifyCaptchaRequest {
@@ -30,18 +30,14 @@ message VerifyCaptchaResponse {
   bool isValid = 1;
 }
 
-message GetCustomHtmlInputFieldRequest {}
-
 message GetCustomHtmlInputFieldResponse {
   string html = 1;
 }
 
-message GetCustomHtmlHeadRequest {}
 message GetCustomHtmlHeadResponse {
   string html = 1;
 }
 
-message GetCustomHtmlBodyEndRequest {}
 message GetCustomHtmlBodyEndResponse {
   string html = 1;
 }
