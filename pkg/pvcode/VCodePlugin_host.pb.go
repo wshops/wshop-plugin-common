@@ -17,6 +17,7 @@ import (
 	api "github.com/tetratelabs/wazero/api"
 	wasi_snapshot_preview1 "github.com/tetratelabs/wazero/imports/wasi_snapshot_preview1"
 	sys "github.com/tetratelabs/wazero/sys"
+	wpc "github.com/wshops/wshop-plugin-common/pkg/wpc"
 	io "io"
 	fs "io/fs"
 	os "os"
@@ -138,7 +139,7 @@ type vCodePlugin struct {
 	sendverificationcode api.Function
 }
 
-func (p *vCodePlugin) ConfigPluginInfo(ctx context.Context, request emptypb.Empty) (response PluginInfo, err error) {
+func (p *vCodePlugin) ConfigPluginInfo(ctx context.Context, request emptypb.Empty) (response wpc.PluginInfo, err error) {
 	data, err := request.MarshalVT()
 	if err != nil {
 		return response, err

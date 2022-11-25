@@ -1,6 +1,7 @@
 syntax = "proto3";
 package pvcode;
 import "google/protobuf/empty.proto";
+import "common.proto";
 
 option go_package = "github.com/wshops/wshop-plugin-common/pkg/pvcode";
 
@@ -24,33 +25,4 @@ message SendVerificationCodeRequest {
 message SendVerificationCodeResponse {
   bool success = 1;
   string error = 2;
-}
-
-//**************************
-//*        commons         *
-//**************************
-message ConfigPluginInfoRequest {}
-message PluginInfo {
-  string Id = 1;
-  string Name = 2;
-  string Version = 3;
-  string Author = 4;
-  string Description = 5;
-  string Icon = 6;
-  repeated PAttributes UserAttributes = 7;
-  repeated PConstants PluginConstant = 8;
-}
-
-message PAttributes {
-  string Key = 1;
-  string Name = 2;
-  string Description = 3;
-  string Type = 4;
-  string VRule = 5;
-  string VMsg = 6;
-}
-
-message PConstants {
-  string Key = 1;
-  string Value = 2;
 }

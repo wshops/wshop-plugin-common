@@ -1,6 +1,7 @@
 syntax = "proto3";
 package pcaptcha;
 import "google/protobuf/empty.proto";
+import "common.proto";
 
 option go_package = "github.com/wshops/wshop-plugin-common/pkg/pcaptcha";
 
@@ -43,33 +44,4 @@ message GetCustomHtmlHeadResponse {
 message GetCustomHtmlBodyEndRequest {}
 message GetCustomHtmlBodyEndResponse {
   string html = 1;
-}
-
-//**************************
-//*        commons         *
-//**************************
-message ConfigPluginInfoRequest {}
-message PluginInfo {
-  string Id = 1;
-  string Name = 2;
-  string Version = 3;
-  string Author = 4;
-  string Description = 5;
-  string Icon = 6;
-  repeated PAttributes UserAttributes = 7;
-  repeated PConstants PluginConstant = 8;
-}
-
-message PAttributes {
-  string Key = 1;
-  string Name = 2;
-  string Description = 3;
-  string Type = 4;
-  string VRule = 5;
-  string VMsg = 6;
-}
-
-message PConstants {
-  string Key = 1;
-  string Value = 2;
 }
