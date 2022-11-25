@@ -113,6 +113,6 @@ func (x *SendVerificationCodeResponse) GetError() string {
 
 // go:plugin type=plugin version=1
 type VCode interface {
-	ConfigPluginInfo(context.Context, emptypb.Empty) (wpc.PluginInfo, error)
+	GetPluginInfo(context.Context, emptypb.Empty) (wpc.PluginInfo, error)
 	SendVerificationCode(context.Context, SendVerificationCodeRequest) (SendVerificationCodeResponse, error)
 }

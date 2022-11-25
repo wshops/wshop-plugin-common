@@ -27,14 +27,14 @@ func RegisterNotification(p Notification) {
 	notification = p
 }
 
-//export notification_config_plugin_info
-func _notification_config_plugin_info(ptr, size uint32) uint64 {
+//export notification_get_plugin_info
+func _notification_get_plugin_info(ptr, size uint32) uint64 {
 	b := wasm.PtrToByte(ptr, size)
 	var req emptypb.Empty
 	if err := req.UnmarshalVT(b); err != nil {
 		return 0
 	}
-	response, err := notification.ConfigPluginInfo(context.Background(), req)
+	response, err := notification.GetPluginInfo(context.Background(), req)
 	if err != nil {
 		return 0
 	}

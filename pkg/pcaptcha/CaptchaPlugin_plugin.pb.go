@@ -27,14 +27,14 @@ func RegisterCaptcha(p Captcha) {
 	captcha = p
 }
 
-//export captcha_config_plugin_info
-func _captcha_config_plugin_info(ptr, size uint32) uint64 {
+//export captcha_get_plugin_info
+func _captcha_get_plugin_info(ptr, size uint32) uint64 {
 	b := wasm.PtrToByte(ptr, size)
 	var req emptypb.Empty
 	if err := req.UnmarshalVT(b); err != nil {
 		return 0
 	}
-	response, err := captcha.ConfigPluginInfo(context.Background(), req)
+	response, err := captcha.GetPluginInfo(context.Background(), req)
 	if err != nil {
 		return 0
 	}

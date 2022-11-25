@@ -7,7 +7,7 @@ option go_package = "github.com/wshops/wshop-plugin-common/pkg/pvcode";
 
 // go:plugin type=plugin version=1
 service VCode {
-  rpc ConfigPluginInfo(google.protobuf.Empty) returns (PluginInfo);
+  rpc GetPluginInfo(google.protobuf.Empty) returns (PluginInfo);
   rpc SendVerificationCode(SendVerificationCodeRequest) returns (SendVerificationCodeResponse);
 }
 

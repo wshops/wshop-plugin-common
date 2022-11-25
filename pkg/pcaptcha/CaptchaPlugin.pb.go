@@ -118,7 +118,7 @@ func (x *GetCustomHtmlBodyEndResponse) GetHtml() string {
 
 // go:plugin type=plugin version=1
 type Captcha interface {
-	ConfigPluginInfo(context.Context, emptypb.Empty) (wpc.PluginInfo, error)
+	GetPluginInfo(context.Context, emptypb.Empty) (wpc.PluginInfo, error)
 	// VerifyCaptcha 验证验证码
 	VerifyCaptcha(context.Context, VerifyCaptchaRequest) (VerifyCaptchaResponse, error)
 	// GetCustomHtmlInputField 获取自定义的html输入框

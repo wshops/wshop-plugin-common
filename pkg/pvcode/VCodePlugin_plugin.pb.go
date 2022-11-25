@@ -27,14 +27,14 @@ func RegisterVCode(p VCode) {
 	vCode = p
 }
 
-//export v_code_config_plugin_info
-func _v_code_config_plugin_info(ptr, size uint32) uint64 {
+//export v_code_get_plugin_info
+func _v_code_get_plugin_info(ptr, size uint32) uint64 {
 	b := wasm.PtrToByte(ptr, size)
 	var req emptypb.Empty
 	if err := req.UnmarshalVT(b); err != nil {
 		return 0
 	}
-	response, err := vCode.ConfigPluginInfo(context.Background(), req)
+	response, err := vCode.GetPluginInfo(context.Background(), req)
 	if err != nil {
 		return 0
 	}

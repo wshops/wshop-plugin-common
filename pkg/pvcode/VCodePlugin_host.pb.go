@@ -105,9 +105,9 @@ func (p *VCodePlugin) Load(ctx context.Context, pluginPath string) (VCode, error
 		return nil, fmt.Errorf("API version mismatch, host: %d, plugin: %d", VCodePluginAPIVersion, results[0])
 	}
 
-	configplugininfo := module.ExportedFunction("v_code_config_plugin_info")
-	if configplugininfo == nil {
-		return nil, errors.New("v_code_config_plugin_info is not exported")
+	getplugininfo := module.ExportedFunction("v_code_get_plugin_info")
+	if getplugininfo == nil {
+		return nil, errors.New("v_code_get_plugin_info is not exported")
 	}
 	sendverificationcode := module.ExportedFunction("v_code_send_verification_code")
 	if sendverificationcode == nil {
@@ -126,7 +126,7 @@ func (p *VCodePlugin) Load(ctx context.Context, pluginPath string) (VCode, error
 	return &vCodePlugin{module: module,
 		malloc:               malloc,
 		free:                 free,
-		configplugininfo:     configplugininfo,
+		getplugininfo:        getplugininfo,
 		sendverificationcode: sendverificationcode,
 	}, nil
 }
@@ -135,11 +135,11 @@ type vCodePlugin struct {
 	module               api.Module
 	malloc               api.Function
 	free                 api.Function
-	configplugininfo     api.Function
+	getplugininfo        api.Function
 	sendverificationcode api.Function
 }
 
-func (p *vCodePlugin) ConfigPluginInfo(ctx context.Context, request emptypb.Empty) (response wpc.PluginInfo, err error) {
+func (p *vCodePlugin) GetPluginInfo(ctx context.Context, request emptypb.Empty) (response wpc.PluginInfo, err error) {
 	data, err := request.MarshalVT()
 	if err != nil {
 		return response, err
@@ -162,7 +162,7 @@ func (p *vCodePlugin) ConfigPluginInfo(ctx context.Context, request emptypb.Empt
 	if !p.module.Memory().Write(ctx, uint32(dataPtr), data) {
 		return response, fmt.Errorf("Memory.Write(%d, %d) out of range of memory size %d", dataPtr, dataSize, p.module.Memory().Size(ctx))
 	}
-	ptrSize, err := p.configplugininfo.Call(ctx, dataPtr, dataSize)
+	ptrSize, err := p.getplugininfo.Call(ctx, dataPtr, dataSize)
 	if err != nil {
 		return response, err
 	}

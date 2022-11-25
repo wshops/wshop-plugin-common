@@ -105,9 +105,9 @@ func (p *CaptchaPlugin) Load(ctx context.Context, pluginPath string) (Captcha, e
 		return nil, fmt.Errorf("API version mismatch, host: %d, plugin: %d", CaptchaPluginAPIVersion, results[0])
 	}
 
-	configplugininfo := module.ExportedFunction("captcha_config_plugin_info")
-	if configplugininfo == nil {
-		return nil, errors.New("captcha_config_plugin_info is not exported")
+	getplugininfo := module.ExportedFunction("captcha_get_plugin_info")
+	if getplugininfo == nil {
+		return nil, errors.New("captcha_get_plugin_info is not exported")
 	}
 	verifycaptcha := module.ExportedFunction("captcha_verify_captcha")
 	if verifycaptcha == nil {
@@ -138,7 +138,7 @@ func (p *CaptchaPlugin) Load(ctx context.Context, pluginPath string) (Captcha, e
 	return &captchaPlugin{module: module,
 		malloc:                  malloc,
 		free:                    free,
-		configplugininfo:        configplugininfo,
+		getplugininfo:           getplugininfo,
 		verifycaptcha:           verifycaptcha,
 		getcustomhtmlinputfield: getcustomhtmlinputfield,
 		getcustomhtmlhead:       getcustomhtmlhead,
@@ -150,14 +150,14 @@ type captchaPlugin struct {
 	module                  api.Module
 	malloc                  api.Function
 	free                    api.Function
-	configplugininfo        api.Function
+	getplugininfo           api.Function
 	verifycaptcha           api.Function
 	getcustomhtmlinputfield api.Function
 	getcustomhtmlhead       api.Function
 	getcustomhtmlbodyend    api.Function
 }
 
-func (p *captchaPlugin) ConfigPluginInfo(ctx context.Context, request emptypb.Empty) (response wpc.PluginInfo, err error) {
+func (p *captchaPlugin) GetPluginInfo(ctx context.Context, request emptypb.Empty) (response wpc.PluginInfo, err error) {
 	data, err := request.MarshalVT()
 	if err != nil {
 		return response, err
@@ -180,7 +180,7 @@ func (p *captchaPlugin) ConfigPluginInfo(ctx context.Context, request emptypb.Em
 	if !p.module.Memory().Write(ctx, uint32(dataPtr), data) {
 		return response, fmt.Errorf("Memory.Write(%d, %d) out of range of memory size %d", dataPtr, dataSize, p.module.Memory().Size(ctx))
 	}
-	ptrSize, err := p.configplugininfo.Call(ctx, dataPtr, dataSize)
+	ptrSize, err := p.getplugininfo.Call(ctx, dataPtr, dataSize)
 	if err != nil {
 		return response, err
 	}

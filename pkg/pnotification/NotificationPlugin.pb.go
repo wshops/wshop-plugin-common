@@ -85,6 +85,6 @@ func (x *SendNotificationResponse) GetError() string {
 
 // go:plugin type=plugin version=1
 type Notification interface {
-	ConfigPluginInfo(context.Context, emptypb.Empty) (wpc.PluginInfo, error)
+	GetPluginInfo(context.Context, emptypb.Empty) (wpc.PluginInfo, error)
 	SendNotification(context.Context, SendNotificationRequest) (SendNotificationResponse, error)
 }

@@ -105,9 +105,9 @@ func (p *NotificationPlugin) Load(ctx context.Context, pluginPath string) (Notif
 		return nil, fmt.Errorf("API version mismatch, host: %d, plugin: %d", NotificationPluginAPIVersion, results[0])
 	}
 
-	configplugininfo := module.ExportedFunction("notification_config_plugin_info")
-	if configplugininfo == nil {
-		return nil, errors.New("notification_config_plugin_info is not exported")
+	getplugininfo := module.ExportedFunction("notification_get_plugin_info")
+	if getplugininfo == nil {
+		return nil, errors.New("notification_get_plugin_info is not exported")
 	}
 	sendnotification := module.ExportedFunction("notification_send_notification")
 	if sendnotification == nil {
@@ -126,7 +126,7 @@ func (p *NotificationPlugin) Load(ctx context.Context, pluginPath string) (Notif
 	return &notificationPlugin{module: module,
 		malloc:           malloc,
 		free:             free,
-		configplugininfo: configplugininfo,
+		getplugininfo:    getplugininfo,
 		sendnotification: sendnotification,
 	}, nil
 }
@@ -135,11 +135,11 @@ type notificationPlugin struct {
 	module           api.Module
 	malloc           api.Function
 	free             api.Function
-	configplugininfo api.Function
+	getplugininfo    api.Function
 	sendnotification api.Function
 }
 
-func (p *notificationPlugin) ConfigPluginInfo(ctx context.Context, request emptypb.Empty) (response wpc.PluginInfo, err error) {
+func (p *notificationPlugin) GetPluginInfo(ctx context.Context, request emptypb.Empty) (response wpc.PluginInfo, err error) {
 	data, err := request.MarshalVT()
 	if err != nil {
 		return response, err
@@ -162,7 +162,7 @@ func (p *notificationPlugin) ConfigPluginInfo(ctx context.Context, request empty
 	if !p.module.Memory().Write(ctx, uint32(dataPtr), data) {
 		return response, fmt.Errorf("Memory.Write(%d, %d) out of range of memory size %d", dataPtr, dataSize, p.module.Memory().Size(ctx))
 	}
-	ptrSize, err := p.configplugininfo.Call(ctx, dataPtr, dataSize)
+	ptrSize, err := p.getplugininfo.Call(ctx, dataPtr, dataSize)
 	if err != nil {
 		return response, err
 	}
