@@ -12,6 +12,7 @@ import (
 	context "context"
 	emptypb "github.com/knqyf263/go-plugin/types/known/emptypb"
 	wasm "github.com/knqyf263/go-plugin/wasm"
+	wpc "github.com/wshops/wshop-plugin-common/pkg/wpc"
 )
 
 const VCodePluginAPIVersion = 1
@@ -65,4 +66,164 @@ func _v_code_send_verification_code(ptr, size uint32) uint64 {
 	}
 	ptr, size = wasm.ByteToPtr(b)
 	return (uint64(ptr) << uint64(32)) | uint64(size)
+}
+
+type hostFunctions struct{}
+
+func NewHostFunctions() HostFunctions {
+	return hostFunctions{}
+}
+
+//go:wasm-module env
+//export log_info
+func _log_info(ptr uint32, size uint32) uint64
+
+func (h hostFunctions) LogInfo(ctx context.Context, request wpc.HFuncLogRequest) (response emptypb.Empty, err error) {
+	buf, err := request.MarshalVT()
+	if err != nil {
+		return response, err
+	}
+	ptr, size := wasm.ByteToPtr(buf)
+	ptrSize := _log_info(ptr, size)
+
+	ptr = uint32(ptrSize >> 32)
+	size = uint32(ptrSize)
+	buf = wasm.PtrToByte(ptr, size)
+
+	if err = response.UnmarshalVT(buf); err != nil {
+		return response, err
+	}
+	return response, nil
+}
+
+//go:wasm-module env
+//export log_error
+func _log_error(ptr uint32, size uint32) uint64
+
+func (h hostFunctions) LogError(ctx context.Context, request wpc.HFuncLogRequest) (response emptypb.Empty, err error) {
+	buf, err := request.MarshalVT()
+	if err != nil {
+		return response, err
+	}
+	ptr, size := wasm.ByteToPtr(buf)
+	ptrSize := _log_error(ptr, size)
+
+	ptr = uint32(ptrSize >> 32)
+	size = uint32(ptrSize)
+	buf = wasm.PtrToByte(ptr, size)
+
+	if err = response.UnmarshalVT(buf); err != nil {
+		return response, err
+	}
+	return response, nil
+}
+
+//go:wasm-module env
+//export log_debug
+func _log_debug(ptr uint32, size uint32) uint64
+
+func (h hostFunctions) LogDebug(ctx context.Context, request wpc.HFuncLogRequest) (response emptypb.Empty, err error) {
+	buf, err := request.MarshalVT()
+	if err != nil {
+		return response, err
+	}
+	ptr, size := wasm.ByteToPtr(buf)
+	ptrSize := _log_debug(ptr, size)
+
+	ptr = uint32(ptrSize >> 32)
+	size = uint32(ptrSize)
+	buf = wasm.PtrToByte(ptr, size)
+
+	if err = response.UnmarshalVT(buf); err != nil {
+		return response, err
+	}
+	return response, nil
+}
+
+//go:wasm-module env
+//export log_warn
+func _log_warn(ptr uint32, size uint32) uint64
+
+func (h hostFunctions) LogWarn(ctx context.Context, request wpc.HFuncLogRequest) (response emptypb.Empty, err error) {
+	buf, err := request.MarshalVT()
+	if err != nil {
+		return response, err
+	}
+	ptr, size := wasm.ByteToPtr(buf)
+	ptrSize := _log_warn(ptr, size)
+
+	ptr = uint32(ptrSize >> 32)
+	size = uint32(ptrSize)
+	buf = wasm.PtrToByte(ptr, size)
+
+	if err = response.UnmarshalVT(buf); err != nil {
+		return response, err
+	}
+	return response, nil
+}
+
+//go:wasm-module env
+//export log_fatal
+func _log_fatal(ptr uint32, size uint32) uint64
+
+func (h hostFunctions) LogFatal(ctx context.Context, request wpc.HFuncLogRequest) (response emptypb.Empty, err error) {
+	buf, err := request.MarshalVT()
+	if err != nil {
+		return response, err
+	}
+	ptr, size := wasm.ByteToPtr(buf)
+	ptrSize := _log_fatal(ptr, size)
+
+	ptr = uint32(ptrSize >> 32)
+	size = uint32(ptrSize)
+	buf = wasm.PtrToByte(ptr, size)
+
+	if err = response.UnmarshalVT(buf); err != nil {
+		return response, err
+	}
+	return response, nil
+}
+
+//go:wasm-module env
+//export log_panic
+func _log_panic(ptr uint32, size uint32) uint64
+
+func (h hostFunctions) LogPanic(ctx context.Context, request wpc.HFuncLogRequest) (response emptypb.Empty, err error) {
+	buf, err := request.MarshalVT()
+	if err != nil {
+		return response, err
+	}
+	ptr, size := wasm.ByteToPtr(buf)
+	ptrSize := _log_panic(ptr, size)
+
+	ptr = uint32(ptrSize >> 32)
+	size = uint32(ptrSize)
+	buf = wasm.PtrToByte(ptr, size)
+
+	if err = response.UnmarshalVT(buf); err != nil {
+		return response, err
+	}
+	return response, nil
+}
+
+//go:wasm-module env
+//export http_request
+func _http_request(ptr uint32, size uint32) uint64
+
+func (h hostFunctions) HttpRequest(ctx context.Context, request wpc.HFuncHttpRequest) (response wpc.HFuncHttpResponse, err error) {
+	buf, err := request.MarshalVT()
+	if err != nil {
+		return response, err
+	}
+	ptr, size := wasm.ByteToPtr(buf)
+	ptrSize := _http_request(ptr, size)
+
+	ptr = uint32(ptrSize >> 32)
+	size = uint32(ptrSize)
+	buf = wasm.PtrToByte(ptr, size)
+
+	if err = response.UnmarshalVT(buf); err != nil {
+		return response, err
+	}
+	return response, nil
 }

@@ -18,8 +18,39 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+type HFuncHttpRequestMethod int32
+
+const (
+	HFuncHttpRequestMethod_GET    HFuncHttpRequestMethod = 0
+	HFuncHttpRequestMethod_POST   HFuncHttpRequestMethod = 1
+	HFuncHttpRequestMethod_PUT    HFuncHttpRequestMethod = 2
+	HFuncHttpRequestMethod_DELETE HFuncHttpRequestMethod = 3
+)
+
+// Enum value maps for HFuncHttpRequestMethod.
+var (
+	HFuncHttpRequestMethod_name = map[int32]string{
+		0: "GET",
+		1: "POST",
+		2: "PUT",
+		3: "DELETE",
+	}
+	HFuncHttpRequestMethod_value = map[string]int32{
+		"GET":    0,
+		"POST":   1,
+		"PUT":    2,
+		"DELETE": 3,
+	}
+)
+
+func (x HFuncHttpRequestMethod) Enum() *HFuncHttpRequestMethod {
+	p := new(HFuncHttpRequestMethod)
+	*p = x
+	return p
+}
+
 // **************************
-// *        commons         *
+// *    plugin commons      *
 // **************************
 type PluginInfo struct {
 	state         protoimpl.MessageState
@@ -143,6 +174,111 @@ func (x *PluginAttribute) GetVRule() string {
 func (x *PluginAttribute) GetVMsg() string {
 	if x != nil {
 		return x.VMsg
+	}
+	return ""
+}
+
+type HFuncHttpRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Method  HFuncHttpRequestMethod `protobuf:"varint,1,opt,name=method,proto3,enum=HFuncHttpRequestMethod" json:"method,omitempty"`
+	Url     string                 `protobuf:"bytes,2,opt,name=url,proto3" json:"url,omitempty"`
+	Body    string                 `protobuf:"bytes,3,opt,name=body,proto3" json:"body,omitempty"`
+	Headers map[string]string      `protobuf:"bytes,4,rep,name=headers,proto3" json:"headers,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	Params  map[string]string      `protobuf:"bytes,5,rep,name=params,proto3" json:"params,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+}
+
+func (x *HFuncHttpRequest) ProtoReflect() protoreflect.Message {
+	panic(`not implemented`)
+}
+
+func (x *HFuncHttpRequest) GetMethod() HFuncHttpRequestMethod {
+	if x != nil {
+		return x.Method
+	}
+	return HFuncHttpRequestMethod_GET
+}
+
+func (x *HFuncHttpRequest) GetUrl() string {
+	if x != nil {
+		return x.Url
+	}
+	return ""
+}
+
+func (x *HFuncHttpRequest) GetBody() string {
+	if x != nil {
+		return x.Body
+	}
+	return ""
+}
+
+func (x *HFuncHttpRequest) GetHeaders() map[string]string {
+	if x != nil {
+		return x.Headers
+	}
+	return nil
+}
+
+func (x *HFuncHttpRequest) GetParams() map[string]string {
+	if x != nil {
+		return x.Params
+	}
+	return nil
+}
+
+type HFuncHttpResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	StatusCode int32             `protobuf:"varint,1,opt,name=status_code,json=statusCode,proto3" json:"status_code,omitempty"`
+	Body       string            `protobuf:"bytes,2,opt,name=body,proto3" json:"body,omitempty"`
+	Headers    map[string]string `protobuf:"bytes,3,rep,name=headers,proto3" json:"headers,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+}
+
+func (x *HFuncHttpResponse) ProtoReflect() protoreflect.Message {
+	panic(`not implemented`)
+}
+
+func (x *HFuncHttpResponse) GetStatusCode() int32 {
+	if x != nil {
+		return x.StatusCode
+	}
+	return 0
+}
+
+func (x *HFuncHttpResponse) GetBody() string {
+	if x != nil {
+		return x.Body
+	}
+	return ""
+}
+
+func (x *HFuncHttpResponse) GetHeaders() map[string]string {
+	if x != nil {
+		return x.Headers
+	}
+	return nil
+}
+
+type HFuncLogRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Content string `protobuf:"bytes,1,opt,name=content,proto3" json:"content,omitempty"`
+}
+
+func (x *HFuncLogRequest) ProtoReflect() protoreflect.Message {
+	panic(`not implemented`)
+}
+
+func (x *HFuncLogRequest) GetContent() string {
+	if x != nil {
+		return x.Content
 	}
 	return ""
 }

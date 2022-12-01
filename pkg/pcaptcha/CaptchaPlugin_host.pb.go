@@ -13,6 +13,7 @@ import (
 	errors "errors"
 	fmt "fmt"
 	emptypb "github.com/knqyf263/go-plugin/types/known/emptypb"
+	wasm "github.com/knqyf263/go-plugin/wasm"
 	wazero "github.com/tetratelabs/wazero"
 	api "github.com/tetratelabs/wazero/api"
 	wasi_snapshot_preview1 "github.com/tetratelabs/wazero/imports/wasi_snapshot_preview1"
@@ -22,6 +23,247 @@ import (
 	fs "io/fs"
 	os "os"
 )
+
+const (
+	i32 = api.ValueTypeI32
+	i64 = api.ValueTypeI64
+)
+
+type _hostFunctions struct {
+	HostFunctions
+}
+
+// Instantiate a Go-defined module named "env" that exports host functions.
+func (h _hostFunctions) Instantiate(ctx context.Context, r wazero.Runtime, ns wazero.Namespace) error {
+	envBuilder := r.NewHostModuleBuilder("env")
+
+	envBuilder.NewFunctionBuilder().
+		WithGoModuleFunction(api.GoModuleFunc(h._LogInfo), []api.ValueType{i32, i32}, []api.ValueType{i64}).
+		WithParameterNames("offset", "size").
+		Export("log_info")
+
+	envBuilder.NewFunctionBuilder().
+		WithGoModuleFunction(api.GoModuleFunc(h._LogError), []api.ValueType{i32, i32}, []api.ValueType{i64}).
+		WithParameterNames("offset", "size").
+		Export("log_error")
+
+	envBuilder.NewFunctionBuilder().
+		WithGoModuleFunction(api.GoModuleFunc(h._LogDebug), []api.ValueType{i32, i32}, []api.ValueType{i64}).
+		WithParameterNames("offset", "size").
+		Export("log_debug")
+
+	envBuilder.NewFunctionBuilder().
+		WithGoModuleFunction(api.GoModuleFunc(h._LogWarn), []api.ValueType{i32, i32}, []api.ValueType{i64}).
+		WithParameterNames("offset", "size").
+		Export("log_warn")
+
+	envBuilder.NewFunctionBuilder().
+		WithGoModuleFunction(api.GoModuleFunc(h._LogFatal), []api.ValueType{i32, i32}, []api.ValueType{i64}).
+		WithParameterNames("offset", "size").
+		Export("log_fatal")
+
+	envBuilder.NewFunctionBuilder().
+		WithGoModuleFunction(api.GoModuleFunc(h._LogPanic), []api.ValueType{i32, i32}, []api.ValueType{i64}).
+		WithParameterNames("offset", "size").
+		Export("log_panic")
+
+	envBuilder.NewFunctionBuilder().
+		WithGoModuleFunction(api.GoModuleFunc(h._HttpRequest), []api.ValueType{i32, i32}, []api.ValueType{i64}).
+		WithParameterNames("offset", "size").
+		Export("http_request")
+
+	_, err := envBuilder.Instantiate(ctx, ns)
+	return err
+}
+
+func (h _hostFunctions) _LogInfo(ctx context.Context, m api.Module, params []uint64) []uint64 {
+	offset, size := uint32(params[0]), uint32(params[1])
+	buf, err := wasm.ReadMemory(ctx, m, offset, size)
+	if err != nil {
+		panic(err)
+	}
+	var request wpc.HFuncLogRequest
+	err = request.UnmarshalVT(buf)
+	if err != nil {
+		panic(err)
+	}
+	resp, err := h.LogInfo(ctx, request)
+	if err != nil {
+		panic(err)
+	}
+	buf, err = resp.MarshalVT()
+	if err != nil {
+		panic(err)
+	}
+	ptr, err := wasm.WriteMemory(ctx, m, buf)
+	if err != nil {
+		panic(err)
+	}
+	ptrLen := (ptr << uint64(32)) | uint64(len(buf))
+	return []uint64{ptrLen}
+}
+
+func (h _hostFunctions) _LogError(ctx context.Context, m api.Module, params []uint64) []uint64 {
+	offset, size := uint32(params[0]), uint32(params[1])
+	buf, err := wasm.ReadMemory(ctx, m, offset, size)
+	if err != nil {
+		panic(err)
+	}
+	var request wpc.HFuncLogRequest
+	err = request.UnmarshalVT(buf)
+	if err != nil {
+		panic(err)
+	}
+	resp, err := h.LogError(ctx, request)
+	if err != nil {
+		panic(err)
+	}
+	buf, err = resp.MarshalVT()
+	if err != nil {
+		panic(err)
+	}
+	ptr, err := wasm.WriteMemory(ctx, m, buf)
+	if err != nil {
+		panic(err)
+	}
+	ptrLen := (ptr << uint64(32)) | uint64(len(buf))
+	return []uint64{ptrLen}
+}
+
+func (h _hostFunctions) _LogDebug(ctx context.Context, m api.Module, params []uint64) []uint64 {
+	offset, size := uint32(params[0]), uint32(params[1])
+	buf, err := wasm.ReadMemory(ctx, m, offset, size)
+	if err != nil {
+		panic(err)
+	}
+	var request wpc.HFuncLogRequest
+	err = request.UnmarshalVT(buf)
+	if err != nil {
+		panic(err)
+	}
+	resp, err := h.LogDebug(ctx, request)
+	if err != nil {
+		panic(err)
+	}
+	buf, err = resp.MarshalVT()
+	if err != nil {
+		panic(err)
+	}
+	ptr, err := wasm.WriteMemory(ctx, m, buf)
+	if err != nil {
+		panic(err)
+	}
+	ptrLen := (ptr << uint64(32)) | uint64(len(buf))
+	return []uint64{ptrLen}
+}
+
+func (h _hostFunctions) _LogWarn(ctx context.Context, m api.Module, params []uint64) []uint64 {
+	offset, size := uint32(params[0]), uint32(params[1])
+	buf, err := wasm.ReadMemory(ctx, m, offset, size)
+	if err != nil {
+		panic(err)
+	}
+	var request wpc.HFuncLogRequest
+	err = request.UnmarshalVT(buf)
+	if err != nil {
+		panic(err)
+	}
+	resp, err := h.LogWarn(ctx, request)
+	if err != nil {
+		panic(err)
+	}
+	buf, err = resp.MarshalVT()
+	if err != nil {
+		panic(err)
+	}
+	ptr, err := wasm.WriteMemory(ctx, m, buf)
+	if err != nil {
+		panic(err)
+	}
+	ptrLen := (ptr << uint64(32)) | uint64(len(buf))
+	return []uint64{ptrLen}
+}
+
+func (h _hostFunctions) _LogFatal(ctx context.Context, m api.Module, params []uint64) []uint64 {
+	offset, size := uint32(params[0]), uint32(params[1])
+	buf, err := wasm.ReadMemory(ctx, m, offset, size)
+	if err != nil {
+		panic(err)
+	}
+	var request wpc.HFuncLogRequest
+	err = request.UnmarshalVT(buf)
+	if err != nil {
+		panic(err)
+	}
+	resp, err := h.LogFatal(ctx, request)
+	if err != nil {
+		panic(err)
+	}
+	buf, err = resp.MarshalVT()
+	if err != nil {
+		panic(err)
+	}
+	ptr, err := wasm.WriteMemory(ctx, m, buf)
+	if err != nil {
+		panic(err)
+	}
+	ptrLen := (ptr << uint64(32)) | uint64(len(buf))
+	return []uint64{ptrLen}
+}
+
+func (h _hostFunctions) _LogPanic(ctx context.Context, m api.Module, params []uint64) []uint64 {
+	offset, size := uint32(params[0]), uint32(params[1])
+	buf, err := wasm.ReadMemory(ctx, m, offset, size)
+	if err != nil {
+		panic(err)
+	}
+	var request wpc.HFuncLogRequest
+	err = request.UnmarshalVT(buf)
+	if err != nil {
+		panic(err)
+	}
+	resp, err := h.LogPanic(ctx, request)
+	if err != nil {
+		panic(err)
+	}
+	buf, err = resp.MarshalVT()
+	if err != nil {
+		panic(err)
+	}
+	ptr, err := wasm.WriteMemory(ctx, m, buf)
+	if err != nil {
+		panic(err)
+	}
+	ptrLen := (ptr << uint64(32)) | uint64(len(buf))
+	return []uint64{ptrLen}
+}
+
+func (h _hostFunctions) _HttpRequest(ctx context.Context, m api.Module, params []uint64) []uint64 {
+	offset, size := uint32(params[0]), uint32(params[1])
+	buf, err := wasm.ReadMemory(ctx, m, offset, size)
+	if err != nil {
+		panic(err)
+	}
+	var request wpc.HFuncHttpRequest
+	err = request.UnmarshalVT(buf)
+	if err != nil {
+		panic(err)
+	}
+	resp, err := h.HttpRequest(ctx, request)
+	if err != nil {
+		panic(err)
+	}
+	buf, err = resp.MarshalVT()
+	if err != nil {
+		panic(err)
+	}
+	ptr, err := wasm.WriteMemory(ctx, m, buf)
+	if err != nil {
+		panic(err)
+	}
+	ptrLen := (ptr << uint64(32)) | uint64(len(buf))
+	return []uint64{ptrLen}
+}
 
 const CaptchaPluginAPIVersion = 1
 
@@ -59,7 +301,7 @@ func (p *CaptchaPlugin) Close(ctx context.Context) (err error) {
 	return
 }
 
-func (p *CaptchaPlugin) Load(ctx context.Context, pluginPath string) (Captcha, error) {
+func (p *CaptchaPlugin) Load(ctx context.Context, pluginPath string, hostFunctions HostFunctions) (Captcha, error) {
 	b, err := os.ReadFile(pluginPath)
 	if err != nil {
 		return nil, err
@@ -67,6 +309,12 @@ func (p *CaptchaPlugin) Load(ctx context.Context, pluginPath string) (Captcha, e
 
 	// Create an empty namespace so that multiple modules will not conflict
 	ns := p.runtime.NewNamespace(ctx)
+
+	h := _hostFunctions{hostFunctions}
+
+	if err := h.Instantiate(ctx, p.runtime, ns); err != nil {
+		return nil, err
+	}
 
 	if _, err = wasi_snapshot_preview1.NewBuilder(p.runtime).Instantiate(ctx, ns); err != nil {
 		return nil, err

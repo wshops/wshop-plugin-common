@@ -128,3 +128,14 @@ type Captcha interface {
 	// GetCustomHtmlBodyEnd 自定义 html body 中最结尾需要加的内容
 	GetCustomHtmlBodyEnd(context.Context, emptypb.Empty) (GetCustomHtmlBodyEndResponse, error)
 }
+
+// go:plugin type=host
+type HostFunctions interface {
+	LogInfo(context.Context, wpc.HFuncLogRequest) (emptypb.Empty, error)
+	LogError(context.Context, wpc.HFuncLogRequest) (emptypb.Empty, error)
+	LogDebug(context.Context, wpc.HFuncLogRequest) (emptypb.Empty, error)
+	LogWarn(context.Context, wpc.HFuncLogRequest) (emptypb.Empty, error)
+	LogFatal(context.Context, wpc.HFuncLogRequest) (emptypb.Empty, error)
+	LogPanic(context.Context, wpc.HFuncLogRequest) (emptypb.Empty, error)
+	HttpRequest(context.Context, wpc.HFuncHttpRequest) (wpc.HFuncHttpResponse, error)
+}

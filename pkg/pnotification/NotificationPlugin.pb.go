@@ -88,3 +88,14 @@ type Notification interface {
 	GetPluginInfo(context.Context, emptypb.Empty) (wpc.PluginInfo, error)
 	SendNotification(context.Context, SendNotificationRequest) (SendNotificationResponse, error)
 }
+
+// go:plugin type=host
+type HostFunctions interface {
+	LogInfo(context.Context, wpc.HFuncLogRequest) (emptypb.Empty, error)
+	LogError(context.Context, wpc.HFuncLogRequest) (emptypb.Empty, error)
+	LogDebug(context.Context, wpc.HFuncLogRequest) (emptypb.Empty, error)
+	LogWarn(context.Context, wpc.HFuncLogRequest) (emptypb.Empty, error)
+	LogFatal(context.Context, wpc.HFuncLogRequest) (emptypb.Empty, error)
+	LogPanic(context.Context, wpc.HFuncLogRequest) (emptypb.Empty, error)
+	HttpRequest(context.Context, wpc.HFuncHttpRequest) (wpc.HFuncHttpResponse, error)
+}

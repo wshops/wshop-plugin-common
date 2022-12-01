@@ -3,6 +3,7 @@ releases/
 data/
 appdata.db
 bin/
+.fleet/
 web/admin/
 ### JetBrains
 .idea/

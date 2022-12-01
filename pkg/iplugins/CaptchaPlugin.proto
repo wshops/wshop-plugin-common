@@ -41,3 +41,18 @@ message GetCustomHtmlHeadResponse {
 message GetCustomHtmlBodyEndResponse {
   string html = 20;
 }
+
+//**************************
+//*      host function     *
+//**************************
+
+// go:plugin type=host
+service HostFunctions {
+  rpc LogInfo(HFuncLogRequest) returns (google.protobuf.Empty);
+  rpc LogError(HFuncLogRequest) returns (google.protobuf.Empty);
+  rpc LogDebug(HFuncLogRequest) returns (google.protobuf.Empty);
+  rpc LogWarn(HFuncLogRequest) returns (google.protobuf.Empty);
+  rpc LogFatal(HFuncLogRequest) returns (google.protobuf.Empty);
+  rpc LogPanic(HFuncLogRequest) returns (google.protobuf.Empty);
+  rpc HttpRequest(HFuncHttpRequest) returns (HFuncHttpResponse);
+}
