@@ -76,8 +76,8 @@ func (h _hostFunctions) Instantiate(ctx context.Context, r wazero.Runtime, ns wa
 	return err
 }
 
-func (h _hostFunctions) _LogInfo(ctx context.Context, m api.Module, params []uint64) []uint64 {
-	offset, size := uint32(params[0]), uint32(params[1])
+func (h _hostFunctions) _LogInfo(ctx context.Context, m api.Module, stack []uint64) {
+	offset, size := uint32(stack[0]), uint32(stack[1])
 	buf, err := wasm.ReadMemory(ctx, m, offset, size)
 	if err != nil {
 		panic(err)
@@ -100,11 +100,11 @@ func (h _hostFunctions) _LogInfo(ctx context.Context, m api.Module, params []uin
 		panic(err)
 	}
 	ptrLen := (ptr << uint64(32)) | uint64(len(buf))
-	return []uint64{ptrLen}
+	stack[0] = ptrLen
 }
 
-func (h _hostFunctions) _LogError(ctx context.Context, m api.Module, params []uint64) []uint64 {
-	offset, size := uint32(params[0]), uint32(params[1])
+func (h _hostFunctions) _LogError(ctx context.Context, m api.Module, stack []uint64) {
+	offset, size := uint32(stack[0]), uint32(stack[1])
 	buf, err := wasm.ReadMemory(ctx, m, offset, size)
 	if err != nil {
 		panic(err)
@@ -127,11 +127,11 @@ func (h _hostFunctions) _LogError(ctx context.Context, m api.Module, params []ui
 		panic(err)
 	}
 	ptrLen := (ptr << uint64(32)) | uint64(len(buf))
-	return []uint64{ptrLen}
+	stack[0] = ptrLen
 }
 
-func (h _hostFunctions) _LogDebug(ctx context.Context, m api.Module, params []uint64) []uint64 {
-	offset, size := uint32(params[0]), uint32(params[1])
+func (h _hostFunctions) _LogDebug(ctx context.Context, m api.Module, stack []uint64) {
+	offset, size := uint32(stack[0]), uint32(stack[1])
 	buf, err := wasm.ReadMemory(ctx, m, offset, size)
 	if err != nil {
 		panic(err)
@@ -154,11 +154,11 @@ func (h _hostFunctions) _LogDebug(ctx context.Context, m api.Module, params []ui
 		panic(err)
 	}
 	ptrLen := (ptr << uint64(32)) | uint64(len(buf))
-	return []uint64{ptrLen}
+	stack[0] = ptrLen
 }
 
-func (h _hostFunctions) _LogWarn(ctx context.Context, m api.Module, params []uint64) []uint64 {
-	offset, size := uint32(params[0]), uint32(params[1])
+func (h _hostFunctions) _LogWarn(ctx context.Context, m api.Module, stack []uint64) {
+	offset, size := uint32(stack[0]), uint32(stack[1])
 	buf, err := wasm.ReadMemory(ctx, m, offset, size)
 	if err != nil {
 		panic(err)
@@ -181,11 +181,11 @@ func (h _hostFunctions) _LogWarn(ctx context.Context, m api.Module, params []uin
 		panic(err)
 	}
 	ptrLen := (ptr << uint64(32)) | uint64(len(buf))
-	return []uint64{ptrLen}
+	stack[0] = ptrLen
 }
 
-func (h _hostFunctions) _LogFatal(ctx context.Context, m api.Module, params []uint64) []uint64 {
-	offset, size := uint32(params[0]), uint32(params[1])
+func (h _hostFunctions) _LogFatal(ctx context.Context, m api.Module, stack []uint64) {
+	offset, size := uint32(stack[0]), uint32(stack[1])
 	buf, err := wasm.ReadMemory(ctx, m, offset, size)
 	if err != nil {
 		panic(err)
@@ -208,11 +208,11 @@ func (h _hostFunctions) _LogFatal(ctx context.Context, m api.Module, params []ui
 		panic(err)
 	}
 	ptrLen := (ptr << uint64(32)) | uint64(len(buf))
-	return []uint64{ptrLen}
+	stack[0] = ptrLen
 }
 
-func (h _hostFunctions) _LogPanic(ctx context.Context, m api.Module, params []uint64) []uint64 {
-	offset, size := uint32(params[0]), uint32(params[1])
+func (h _hostFunctions) _LogPanic(ctx context.Context, m api.Module, stack []uint64) {
+	offset, size := uint32(stack[0]), uint32(stack[1])
 	buf, err := wasm.ReadMemory(ctx, m, offset, size)
 	if err != nil {
 		panic(err)
@@ -235,11 +235,11 @@ func (h _hostFunctions) _LogPanic(ctx context.Context, m api.Module, params []ui
 		panic(err)
 	}
 	ptrLen := (ptr << uint64(32)) | uint64(len(buf))
-	return []uint64{ptrLen}
+	stack[0] = ptrLen
 }
 
-func (h _hostFunctions) _HttpRequest(ctx context.Context, m api.Module, params []uint64) []uint64 {
-	offset, size := uint32(params[0]), uint32(params[1])
+func (h _hostFunctions) _HttpRequest(ctx context.Context, m api.Module, stack []uint64) {
+	offset, size := uint32(stack[0]), uint32(stack[1])
 	buf, err := wasm.ReadMemory(ctx, m, offset, size)
 	if err != nil {
 		panic(err)
@@ -262,7 +262,7 @@ func (h _hostFunctions) _HttpRequest(ctx context.Context, m api.Module, params [
 		panic(err)
 	}
 	ptrLen := (ptr << uint64(32)) | uint64(len(buf))
-	return []uint64{ptrLen}
+	stack[0] = ptrLen
 }
 
 const CaptchaPluginAPIVersion = 1
