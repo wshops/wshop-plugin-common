@@ -23,6 +23,20 @@ message PluginAttribute {
   string v_msg = 10;
 }
 
+message PluginContext {
+  string id = 1;
+  string name = 2;
+  string version = 3;
+  string author = 4;
+  string description = 5;
+  string icon_url = 6;
+  map<string, string> plugin_constants = 10;
+  map<string, string> user_attribute_data = 15;
+}
+
+message EmptyRequest {
+  PluginContext pctx = 1;
+}
 
 //**************************
 //*  host function common  *

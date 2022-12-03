@@ -11,6 +11,7 @@ service Notification {
 }
 
 message SendNotificationRequest {
+  PluginContext pctx = 1;
   string target = 2;
   string title = 4;
   string content = 6;

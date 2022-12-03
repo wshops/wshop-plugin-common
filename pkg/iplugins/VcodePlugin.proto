@@ -17,9 +17,10 @@ enum SendType {
   OTHER = 5;
 }
 message SendVerificationCodeRequest {
-  SendType sendType = 1;
-  string target = 2;
-  string code = 3;
+  PluginContext pctx = 1;
+  SendType sendType = 2;
+  string target = 3;
+  string code = 4;
 }
 
 message SendVerificationCodeResponse {

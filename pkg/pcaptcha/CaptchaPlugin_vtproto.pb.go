@@ -8,6 +8,8 @@ package pcaptcha
 
 import (
 	fmt "fmt"
+	wpc "github.com/wshops/wshop-plugin-common/pkg/wpc"
+	proto "google.golang.org/protobuf/proto"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	io "io"
 	bits "math/bits"
@@ -56,6 +58,28 @@ func (m *VerifyCaptchaRequest) MarshalToSizedBufferVT(dAtA []byte) (int, error) 
 		i = encodeVarint(dAtA, i, uint64(len(m.Captcha)))
 		i--
 		dAtA[i] = 0x12
+	}
+	if m.Pctx != nil {
+		if marshalto, ok := interface{}(m.Pctx).(interface {
+			MarshalToSizedBufferVT([]byte) (int, error)
+		}); ok {
+			size, err := marshalto.MarshalToSizedBufferVT(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarint(dAtA, i, uint64(size))
+		} else {
+			encoded, err := proto.Marshal(m.Pctx)
+			if err != nil {
+				return 0, err
+			}
+			i -= len(encoded)
+			copy(dAtA[i:], encoded)
+			i = encodeVarint(dAtA, i, uint64(len(encoded)))
+		}
+		i--
+		dAtA[i] = 0xa
 	}
 	return len(dAtA) - i, nil
 }
@@ -246,6 +270,16 @@ func (m *VerifyCaptchaRequest) SizeVT() (n int) {
 	}
 	var l int
 	_ = l
+	if m.Pctx != nil {
+		if size, ok := interface{}(m.Pctx).(interface {
+			SizeVT() int
+		}); ok {
+			l = size.SizeVT()
+		} else {
+			l = proto.Size(m.Pctx)
+		}
+		n += 1 + l + sov(uint64(l))
+	}
 	l = len(m.Captcha)
 	if l > 0 {
 		n += 1 + l + sov(uint64(l))
@@ -354,6 +388,50 @@ func (m *VerifyCaptchaRequest) UnmarshalVT(dAtA []byte) error {
 			return fmt.Errorf("proto: VerifyCaptchaRequest: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Pctx", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLength
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLength
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Pctx == nil {
+				m.Pctx = &wpc.PluginContext{}
+			}
+			if unmarshal, ok := interface{}(m.Pctx).(interface {
+				UnmarshalVT([]byte) error
+			}); ok {
+				if err := unmarshal.UnmarshalVT(dAtA[iNdEx:postIndex]); err != nil {
+					return err
+				}
+			} else {
+				if err := proto.Unmarshal(dAtA[iNdEx:postIndex], m.Pctx); err != nil {
+					return err
+				}
+			}
+			iNdEx = postIndex
 		case 2:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Captcha", wireType)

@@ -26,13 +26,21 @@ type SendNotificationRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Target  string `protobuf:"bytes,2,opt,name=target,proto3" json:"target,omitempty"`
-	Title   string `protobuf:"bytes,4,opt,name=title,proto3" json:"title,omitempty"`
-	Content string `protobuf:"bytes,6,opt,name=content,proto3" json:"content,omitempty"`
+	Pctx    *wpc.PluginContext `protobuf:"bytes,1,opt,name=pctx,proto3" json:"pctx,omitempty"`
+	Target  string             `protobuf:"bytes,2,opt,name=target,proto3" json:"target,omitempty"`
+	Title   string             `protobuf:"bytes,4,opt,name=title,proto3" json:"title,omitempty"`
+	Content string             `protobuf:"bytes,6,opt,name=content,proto3" json:"content,omitempty"`
 }
 
 func (x *SendNotificationRequest) ProtoReflect() protoreflect.Message {
 	panic(`not implemented`)
+}
+
+func (x *SendNotificationRequest) GetPctx() *wpc.PluginContext {
+	if x != nil {
+		return x.Pctx
+	}
+	return nil
 }
 
 func (x *SendNotificationRequest) GetTarget() string {

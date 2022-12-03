@@ -178,6 +178,100 @@ func (x *PluginAttribute) GetVMsg() string {
 	return ""
 }
 
+type PluginContext struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Id                string            `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Name              string            `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	Version           string            `protobuf:"bytes,3,opt,name=version,proto3" json:"version,omitempty"`
+	Author            string            `protobuf:"bytes,4,opt,name=author,proto3" json:"author,omitempty"`
+	Description       string            `protobuf:"bytes,5,opt,name=description,proto3" json:"description,omitempty"`
+	IconUrl           string            `protobuf:"bytes,6,opt,name=icon_url,json=iconUrl,proto3" json:"icon_url,omitempty"`
+	PluginConstants   map[string]string `protobuf:"bytes,10,rep,name=plugin_constants,json=pluginConstants,proto3" json:"plugin_constants,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	UserAttributeData map[string]string `protobuf:"bytes,15,rep,name=user_attribute_data,json=userAttributeData,proto3" json:"user_attribute_data,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+}
+
+func (x *PluginContext) ProtoReflect() protoreflect.Message {
+	panic(`not implemented`)
+}
+
+func (x *PluginContext) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *PluginContext) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *PluginContext) GetVersion() string {
+	if x != nil {
+		return x.Version
+	}
+	return ""
+}
+
+func (x *PluginContext) GetAuthor() string {
+	if x != nil {
+		return x.Author
+	}
+	return ""
+}
+
+func (x *PluginContext) GetDescription() string {
+	if x != nil {
+		return x.Description
+	}
+	return ""
+}
+
+func (x *PluginContext) GetIconUrl() string {
+	if x != nil {
+		return x.IconUrl
+	}
+	return ""
+}
+
+func (x *PluginContext) GetPluginConstants() map[string]string {
+	if x != nil {
+		return x.PluginConstants
+	}
+	return nil
+}
+
+func (x *PluginContext) GetUserAttributeData() map[string]string {
+	if x != nil {
+		return x.UserAttributeData
+	}
+	return nil
+}
+
+type EmptyRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Pctx *PluginContext `protobuf:"bytes,1,opt,name=pctx,proto3" json:"pctx,omitempty"`
+}
+
+func (x *EmptyRequest) ProtoReflect() protoreflect.Message {
+	panic(`not implemented`)
+}
+
+func (x *EmptyRequest) GetPctx() *PluginContext {
+	if x != nil {
+		return x.Pctx
+	}
+	return nil
+}
+
 type HFuncHttpRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache

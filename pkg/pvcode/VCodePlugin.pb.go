@@ -54,13 +54,21 @@ type SendVerificationCodeRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	SendType SendType `protobuf:"varint,1,opt,name=sendType,proto3,enum=pvcode.SendType" json:"sendType,omitempty"`
-	Target   string   `protobuf:"bytes,2,opt,name=target,proto3" json:"target,omitempty"`
-	Code     string   `protobuf:"bytes,3,opt,name=code,proto3" json:"code,omitempty"`
+	Pctx     *wpc.PluginContext `protobuf:"bytes,1,opt,name=pctx,proto3" json:"pctx,omitempty"`
+	SendType SendType           `protobuf:"varint,2,opt,name=sendType,proto3,enum=pvcode.SendType" json:"sendType,omitempty"`
+	Target   string             `protobuf:"bytes,3,opt,name=target,proto3" json:"target,omitempty"`
+	Code     string             `protobuf:"bytes,4,opt,name=code,proto3" json:"code,omitempty"`
 }
 
 func (x *SendVerificationCodeRequest) ProtoReflect() protoreflect.Message {
 	panic(`not implemented`)
+}
+
+func (x *SendVerificationCodeRequest) GetPctx() *wpc.PluginContext {
+	if x != nil {
+		return x.Pctx
+	}
+	return nil
 }
 
 func (x *SendVerificationCodeRequest) GetSendType() SendType {

@@ -13,16 +13,17 @@ service Captcha {
   rpc VerifyCaptcha(VerifyCaptchaRequest) returns (VerifyCaptchaResponse);
 
   // GetCustomHtmlInputField 获取自定义的html输入框
-  rpc GetCustomHtmlInputField(google.protobuf.Empty) returns (GetCustomHtmlInputFieldResponse);
+  rpc GetCustomHtmlInputField(EmptyRequest) returns (GetCustomHtmlInputFieldResponse);
 
   // GetCustomHtmlHead 自定义 html 头部中需要加的内容
-  rpc GetCustomHtmlHead(google.protobuf.Empty) returns (GetCustomHtmlHeadResponse);
+  rpc GetCustomHtmlHead(EmptyRequest) returns (GetCustomHtmlHeadResponse);
 
   // GetCustomHtmlBodyEnd 自定义 html body 中最结尾需要加的内容
-  rpc GetCustomHtmlBodyEnd(google.protobuf.Empty) returns (GetCustomHtmlBodyEndResponse);
+  rpc GetCustomHtmlBodyEnd(EmptyRequest) returns (GetCustomHtmlBodyEndResponse);
 }
 
 message VerifyCaptchaRequest {
+  PluginContext pctx = 1;
   string captcha = 2;
 }
 

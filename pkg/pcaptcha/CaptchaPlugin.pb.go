@@ -26,11 +26,19 @@ type VerifyCaptchaRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Captcha string `protobuf:"bytes,2,opt,name=captcha,proto3" json:"captcha,omitempty"`
+	Pctx    *wpc.PluginContext `protobuf:"bytes,1,opt,name=pctx,proto3" json:"pctx,omitempty"`
+	Captcha string             `protobuf:"bytes,2,opt,name=captcha,proto3" json:"captcha,omitempty"`
 }
 
 func (x *VerifyCaptchaRequest) ProtoReflect() protoreflect.Message {
 	panic(`not implemented`)
+}
+
+func (x *VerifyCaptchaRequest) GetPctx() *wpc.PluginContext {
+	if x != nil {
+		return x.Pctx
+	}
+	return nil
 }
 
 func (x *VerifyCaptchaRequest) GetCaptcha() string {
@@ -122,11 +130,11 @@ type Captcha interface {
 	// VerifyCaptcha 验证验证码
 	VerifyCaptcha(context.Context, VerifyCaptchaRequest) (VerifyCaptchaResponse, error)
 	// GetCustomHtmlInputField 获取自定义的html输入框
-	GetCustomHtmlInputField(context.Context, emptypb.Empty) (GetCustomHtmlInputFieldResponse, error)
+	GetCustomHtmlInputField(context.Context, wpc.EmptyRequest) (GetCustomHtmlInputFieldResponse, error)
 	// GetCustomHtmlHead 自定义 html 头部中需要加的内容
-	GetCustomHtmlHead(context.Context, emptypb.Empty) (GetCustomHtmlHeadResponse, error)
+	GetCustomHtmlHead(context.Context, wpc.EmptyRequest) (GetCustomHtmlHeadResponse, error)
 	// GetCustomHtmlBodyEnd 自定义 html body 中最结尾需要加的内容
-	GetCustomHtmlBodyEnd(context.Context, emptypb.Empty) (GetCustomHtmlBodyEndResponse, error)
+	GetCustomHtmlBodyEnd(context.Context, wpc.EmptyRequest) (GetCustomHtmlBodyEndResponse, error)
 }
 
 // go:plugin type=host
