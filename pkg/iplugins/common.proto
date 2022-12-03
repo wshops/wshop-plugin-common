@@ -11,14 +11,22 @@ message PluginInfo {
   string author = 4;
   string description = 5;
   string icon_url = 6;
-  map<string,string> plugin_constants = 10;
+  map<string, string> plugin_constants = 10;
   map<string, PluginAttribute> user_attributes = 15;
+}
+
+enum PluginAttributeType {
+  TEXT = 0;
+  PASSWORD = 1;
+  EMAIL = 2;
+  NUMBER = 3;
+  SWITCH = 4;
 }
 
 message PluginAttribute {
   string name = 2;
   string description = 4;
-  string type = 6;
+  PluginAttributeType type = 6;
   string v_rule = 8;
   string v_msg = 10;
 }

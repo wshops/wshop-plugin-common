@@ -18,6 +18,40 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+type PluginAttributeType int32
+
+const (
+	PluginAttributeType_TEXT     PluginAttributeType = 0
+	PluginAttributeType_PASSWORD PluginAttributeType = 1
+	PluginAttributeType_EMAIL    PluginAttributeType = 2
+	PluginAttributeType_NUMBER   PluginAttributeType = 3
+	PluginAttributeType_SWITCH   PluginAttributeType = 4
+)
+
+// Enum value maps for PluginAttributeType.
+var (
+	PluginAttributeType_name = map[int32]string{
+		0: "TEXT",
+		1: "PASSWORD",
+		2: "EMAIL",
+		3: "NUMBER",
+		4: "SWITCH",
+	}
+	PluginAttributeType_value = map[string]int32{
+		"TEXT":     0,
+		"PASSWORD": 1,
+		"EMAIL":    2,
+		"NUMBER":   3,
+		"SWITCH":   4,
+	}
+)
+
+func (x PluginAttributeType) Enum() *PluginAttributeType {
+	p := new(PluginAttributeType)
+	*p = x
+	return p
+}
+
 type HFuncHttpRequestMethod int32
 
 const (
@@ -132,11 +166,11 @@ type PluginAttribute struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Name        string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
-	Description string `protobuf:"bytes,4,opt,name=description,proto3" json:"description,omitempty"`
-	Type        string `protobuf:"bytes,6,opt,name=type,proto3" json:"type,omitempty"`
-	VRule       string `protobuf:"bytes,8,opt,name=v_rule,json=vRule,proto3" json:"v_rule,omitempty"`
-	VMsg        string `protobuf:"bytes,10,opt,name=v_msg,json=vMsg,proto3" json:"v_msg,omitempty"`
+	Name        string              `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	Description string              `protobuf:"bytes,4,opt,name=description,proto3" json:"description,omitempty"`
+	Type        PluginAttributeType `protobuf:"varint,6,opt,name=type,proto3,enum=PluginAttributeType" json:"type,omitempty"`
+	VRule       string              `protobuf:"bytes,8,opt,name=v_rule,json=vRule,proto3" json:"v_rule,omitempty"`
+	VMsg        string              `protobuf:"bytes,10,opt,name=v_msg,json=vMsg,proto3" json:"v_msg,omitempty"`
 }
 
 func (x *PluginAttribute) ProtoReflect() protoreflect.Message {
@@ -157,11 +191,11 @@ func (x *PluginAttribute) GetDescription() string {
 	return ""
 }
 
-func (x *PluginAttribute) GetType() string {
+func (x *PluginAttribute) GetType() PluginAttributeType {
 	if x != nil {
 		return x.Type
 	}
-	return ""
+	return PluginAttributeType_TEXT
 }
 
 func (x *PluginAttribute) GetVRule() string {
