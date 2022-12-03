@@ -1,5 +1,5 @@
 syntax = "proto3";
-package pvcode;
+package pnotify;
 import "google/protobuf/empty.proto";
 import "common.proto";
 option go_package = "github.com/wshops/wshop-plugin-common/pkg/pvcode";
