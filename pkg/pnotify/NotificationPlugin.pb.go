@@ -4,7 +4,7 @@
 // 	protoc               v3.21.9
 // source: NotificationPlugin.proto
 
-package pvcode
+package pnotify
 
 import (
 	context "context"
